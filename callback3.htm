@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- script type="text/javascript" src="js/jquery-3.2.1.min.js"></script -->
+  <script src="js/chart.js"></script>
+  <script>
+ let itemPrice_matrix="" ;
+ async function getPost() {
+  try {
+    const response = await fetch('https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:1102:STOCK&quote=1');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const post = await response.json(); // Convert response to JS object
+    return post;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
+}
+
+async function displayPost() {
+  const post = await getPost();
+  let itemPrice_name = "" ;
+  let xValues_str="0";
+  if (post) {
+    const itemPrice_arry = post.data.c;
+	const quote_obj = post.data.quote ;
+	for ( var n in quote_obj) {
+	   if ( n == "200009" ) itemPrice_name= quote_obj[n] ;
+	}
+	itemPrice_matrix =[...itemPrice_arry].reverse() ;	
+	const xValues_matrix= Array.from({ length: itemPrice_matrix.length }, (_, index) => index + 1);
+	const xValues = xValues_matrix;
+    let original = itemPrice_matrix ;
+	let yValues = original.map(n => n );
+    let points = yValues.map((y, i) => ({ x: xValues[i], y }));
+    var graph=new Chart(document.getElementById('myChart'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: itemPrice_name,
+          data: points,
+          borderColor: 'blue',
+          cubicInterpolationMode: 'monotone',
+          tension: 0.4,
+          backgroundColor: 'rgba(0,0,255,0.2)',
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear', // 指定為數值型 x 軸
+            title: { display: true, text: 'X 軸（數值）' },
+          },
+          y: {
+            beginAtZero: false,
+            title: { display: true, text: 'Y 軸（數值）' },
+          }
+        }
+      }
+    });
+   }
+  }   
+  </script>
+
+
+ 
+</head>
+<body>
+<canvas id="myChart" width="400" height="200"></canvas>
+<button onclick="displayPost();" style="padding:10px,30px ;">TEST</button>
+<script>
+displayPost();
+</script>
+</body>
+</html>

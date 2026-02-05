@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+  function delayedadd(n1,n2,delaytime){
+    return new Promise(function(resolve,reject){
+       window.setTimeout(function(){
+        resolve(n1+n2);
+       },delaytime);
+    });
+  }
+
+  async function test(){
+    let result= await delayedadd(1,2,2000) ;
+    console.log(result);
+    console.log(5);
+   }
+  </script>
+
+
+ 
+</head>
+<body>
+<button onclick="test();" style="padding:10px,30px ;">TEST</button>
+</body>
+</html>

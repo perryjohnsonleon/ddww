@@ -1,0 +1,20 @@
+<html>
+<body>
+<!-- button id="myButton" onclick="alert('OK!')">按鈕</button -->
+<audio id="myAudio" src="coinspill.mp3"></audio>
+<button onclick="playMusic()">play music</button>
+<button onclick="pauseMusic()">pause music</button>
+
+<script>
+  function playMusic() {
+    const audio = document.getElementById('myAudio');
+    audio.play();
+  }
+
+ function pauseMusic() {
+    const audio = document.getElementById('myAudio');
+    audio.pause();
+ }
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="myChart" width="400" height="200"></canvas>
+  <script>
+    // 範例資料
+    const xValues = [1, 2, 3, 4, 5];
+    const yValues = [10, 15, 13, 17, 20];
+
+    // 轉成 { x, y } 物件陣列
+    const points = yValues.map((y, i) => ({ x: xValues[i], y }));
+
+    new Chart(document.getElementById('myChart'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: '範例折線',
+          data: points,
+          borderColor: 'blue',
+          backgroundColor: 'rgba(0,0,255,0.2)',
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear', // 指定為數值型 x 軸
+            title: { display: true, text: 'X 軸（數值）' },
+          },
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Y 軸（數值）' },
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

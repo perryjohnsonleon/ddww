@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+  <script>
+  let itemPrice_arry=[],itemPrice_matrix=[],stock_name="" , list=[] ;
+  function delayedadd(n1,n2,delaytime){
+    return new Promise(function(resolve,reject){
+       window.setTimeout(function(){
+        let fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:1102:STOCK&quote=1"
+        $.getJSON(fetchUrl_str,function(data){
+            $.each(data,function(key1,item1){
+              if (key1 === 'data') {
+                  console.log(item1);
+                  var itemData = item1 ;          
+              $.each(itemData,function(key2,item2){
+                if (key2  === 'quote' ) {
+                    var itemData2 = item2;	
+                    $.each(itemData2,function(key3,item3){  
+                        if (key3 === '200009') {
+                          console.log(item3) ;
+                          stock_name=item3;
+                        }
+                    })          
+                }
+                if (key2  === 'c' ) {
+              //    console.log(999,item2);	  
+                  itemPrice_arry = item2;
+				  list=item2;
+                  itemPrice_matrix = [...itemPrice_arry].reverse() ;	      		
+                  console.log(999,itemPrice_matrix);	               
+			   }
+                });       
+            }
+            });
+          })
+	//	console.log("@@@@",itemPrice_matrix) ;  
+        resolve(list);
+       },delaytime);
+      //  console.log(itemPrice_matrix);
+      //  resolve(itemPrice_matrix);
+    });
+  }
+
+  async function test(){
+    let result= await delayedadd(1,2,2000) ;
+    console.log("&&" + result);
+   }
+  </script>
+
+
+ 
+</head>
+<body>
+<canvas id="myChart" width="400" height="200"></canvas>
+<button onclick="test();" style="padding:10px,30px ;">TEST</button>
+</body>
+</html>
