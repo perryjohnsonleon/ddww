@@ -123,7 +123,9 @@
      }
   }
   
-       function getWDATA() {            	
+       function getWDATA() {
+		// https://invest.cnyes.com/indices/major 世界各國主要指數
+		//https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=1&limit=20		
         $.getJSON('https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=2&limit=10',function(data){
             // console.log('success');
           $.each(data,function(key1,item1){
