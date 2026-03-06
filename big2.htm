@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lottery Numbers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0a0a12;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 40px;
+    padding-left: 24px;
+  }
+
+  .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.15em;
+    color: #f5c842;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #6b6880;
+    text-align: center;
+    margin-top: -30px;
+  }
+
+  .all-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .balls-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .ball-plus {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: #3a3850;
+    padding-bottom: 20px;
+  }
+
+  .ball-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: dropIn 0.6s both cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .ball {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    position: relative;
+    background: #0d3b8e;
+  }
+
+  .ball.powerball {
+    background: #f5c842;
+  }
+
+  .ball-highlight { display: none; }
+
+  .ball-number {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    color: #ffffff;
+    user-select: none;
+    letter-spacing: 0.02em;
+  }
+
+  .ball.powerball .ball-number {
+    color: #1a1000;
+  }
+
+  .ball-shadow { display: none; }
+
+  .powerball-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f5c842;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+
+  .ball-wrapper:nth-child(1) { animation-delay: 0.10s; }
+  .ball-wrapper:nth-child(2) { animation-delay: 0.22s; }
+  .ball-wrapper:nth-child(3) { animation-delay: 0.34s; }
+  .ball-wrapper:nth-child(4) { animation-delay: 0.46s; }
+  .ball-wrapper:nth-child(5) { animation-delay: 0.58s; }
+  .ball-wrapper:nth-child(7) { animation-delay: 0.74s; }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-50px) scale(0.65); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 560px) {
+    .ball { width: 72px; height: 72px; }
+    .ball-number { font-size: 28px; }
+    .balls-row { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="all-rows" id="all-rows"></div>
+
+<script>
+  const draws = [
+    { numbers: [7,14,21,38,45,48], powerballs: [7,37,38,45] },
+    { numbers: [7,14,21,38,44,49], powerballs: [7,14,21,38] },
+    { numbers: [7,14,21,37,38,45], powerballs: [7,8,27,41,46] },
+    { numbers: [7,08,14,21,38,49], powerballs: [7,15,35,48,49] },
+    { numbers: [7,08,27,38,41,46], powerballs: [7,45] },
+    { numbers: [7,14,15,35,48,49], powerballs: [7,14] },
+  ];
+
+  function makeBall(num, isPowerball) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ball-wrapper';
+
+    const ball = document.createElement('div');
+    ball.className = isPowerball ? 'ball powerball' : 'ball';
+
+    const hl = document.createElement('div');
+    hl.className = 'ball-highlight';
+
+    const numEl = document.createElement('div');
+    numEl.className = 'ball-number';
+    numEl.textContent = String(num).padStart(2, '0');
+
+    ball.append(hl, numEl);
+    wrapper.appendChild(ball);
+
+    const shadow = document.createElement('div');
+    shadow.className = 'ball-shadow';
+    wrapper.appendChild(shadow);
+
+    return wrapper;
+  }
+
+  const container = document.getElementById('all-rows');
+  draws.forEach(draw => {
+    const row = document.createElement('div');
+    row.className = 'balls-row';
+    draw.numbers.forEach(n => row.appendChild(makeBall(n, false)));
+    draw.powerballs.forEach(p => row.appendChild(makeBall(p, true)));
+    container.appendChild(row);
+  });
+
+
+</script>
+</body>
+</html>
