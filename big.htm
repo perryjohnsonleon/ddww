@@ -1,21 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html><pre>
 <html lang="zh-Hant-TW">
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-	<meta http-equiv="content-type" content="text/html;charset=utf-8" />	
-	<title>BIG LOTTO LUCKY</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />	
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>BIG LOTTO LUCKY</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0a0a12;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 40px;
+    padding-left: 24px;
+  }
+
+  .title {
+    font-size:6px;
+    color: #f5c842;
+    text-align:left;
+  }
+
+  .subtitle {
+    font-size:6px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #6b6880;
+    text-align: center;
+    margin-top: -30px;
+  }
+
+  .all-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .balls-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .ball-plus {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    color: #3a3850;
+    padding-bottom:4px;
+  }
+
+  .ball-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: dropIn 0.6s both cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .ball {
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    position:relative;
+    background: #0d3b8e;
+  }
+
+  .ball.powerball {
+    width:12px;
+    height:12px;
+    background:#a7c2e0;
+  }
+
+  .ball-highlight { display: none; }
+
+  .ball-number {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size:10px;
+    color:#D58DAF;
+    user-select: none;
+    letter-spacing: 0.02em;
+  }
+
+  .ball.powerball .ball-number {
+    color: #1a1000;
+  }
+
+  .ball-shadow { display: none; }
+
+  .powerball-label {
+    font-size:8px;
+   letter-spacing:0.02em;
+    text-transform:uppercase;
+    color: #f5c842;
+   // font-weight:200;
+    opacity: 0.85;
+  }
+
+  .ball-wrapper:nth-child(1) { animation-delay: 0.10s; }
+  .ball-wrapper:nth-child(2) { animation-delay: 0.22s; }
+  .ball-wrapper:nth-child(3) { animation-delay: 0.34s; }
+  .ball-wrapper:nth-child(4) { animation-delay: 0.46s; }
+  .ball-wrapper:nth-child(5) { animation-delay: 0.58s; }
+  .ball-wrapper:nth-child(7) { animation-delay: 0.74s; }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-50px) scale(0.65); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 560px) {
+    .ball { width:14px; height:14px; }
+    .ball-number { font-size: 12px; }
+    .balls-row { gap:3px; }
+  }
+</style>
 </head>
 <body>
+<div class="all-rows" id="all-rows"></div>
+<div class="title">
 <pre>
-★★★ 07 14 21 38 44 49 (二合 07 45 , 07 14, 07 21)
-★★ 07 14 21 37 38 49 (二合 07 45 , 07 14, 07 21)
-★ 07 08 14 21 38 49 (四合 07 36 38 45 , 07 14 21 38)
-● 07 08 27 38 41 46 (四合 07 *08 27 41 46) (二合 07 45)
-● 07 14 15 35 48 49 (四合 07 *15 35 48 49) (二合 07 47)
-
-02 03 14 16 25 37 48
-01 07 14 16 25 41 48
- 
 06、07、12、15、18、24、30、31、41 (21)
 05、10、11、15、16、18、26、34、37 (27)
 04、14、17、18、20、25、33、35、36 (40)
@@ -58,5 +174,53 @@
 04、09、16、22、24、31、39、43、47 (14)
 12、13、14、26、28、29、33、43、45 (16)
 </pre>
+</div>
+<script>
+  const draws = [
+    { numbers: [7,14,21,38,45,48], powerballs: [7,37,38,45] },
+    { numbers: [7,14,21,38,44,49], powerballs: [7,14,21,38] },
+    { numbers: [7,14,21,37,38,45], powerballs: [7,8,27,41,46] },
+	{ numbers: [2,13,14,29,36,43], powerballs: [7,14,21,38] },
+	{ numbers: [2,13,14,29,36,39], powerballs: [7,14,21,38] },
+    { numbers: [7,08,14,21,38,49], powerballs: [7,15,35,48,49] },
+    { numbers: [7,08,27,38,41,46], powerballs: [7,45] },
+    { numbers: [7,14,15,35,48,49], powerballs: [7,14] },
+  ];
+
+  function makeBall(num, isPowerball) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ball-wrapper';
+
+    const ball = document.createElement('div');
+    ball.className = isPowerball ? 'ball powerball' : 'ball';
+
+    const hl = document.createElement('div');
+    hl.className = 'ball-highlight';
+
+    const numEl = document.createElement('div');
+    numEl.className = 'ball-number';
+    numEl.textContent = String(num).padStart(2, '0');
+
+    ball.append(hl, numEl);
+    wrapper.appendChild(ball);
+
+    const shadow = document.createElement('div');
+    shadow.className = 'ball-shadow';
+    wrapper.appendChild(shadow);
+
+    return wrapper;
+  }
+
+  const container = document.getElementById('all-rows');
+  draws.forEach(draw => {
+    const row = document.createElement('div');
+    row.className = 'balls-row';
+    draw.numbers.forEach(n => row.appendChild(makeBall(n, false)));
+    draw.powerballs.forEach(p => row.appendChild(makeBall(p, true)));
+    container.appendChild(row);
+  });
+
+
+</script>
 </body>
 </html>
