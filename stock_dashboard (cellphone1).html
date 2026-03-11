@@ -1,0 +1,396 @@
+/* 
+.price {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    transition: color 0.4s ease;
+  }
+*/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Stock Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #090c10;
+    --surface: #0f1318;
+    --border: #1c2230;
+    --gain: #ff3b5c;
+    --loss: #00e5a0;
+    --text: #e8edf5;
+    --muted: #5a6478;
+    --accent: #7b8cde;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Space Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 60% 10%, rgba(123,140,222,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(0,229,160,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .phone {
+    position: relative;
+    width: 390px;
+    height: 780px;
+    background: var(--bg);
+    border-radius: 52px;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+  }
+
+  .notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 34px;
+    background: #0d1017;
+    border-radius: 0 0 20px 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .notch-cam {
+    width: 12px; height: 12px;
+    background: #1a1f2e;
+    border-radius: 50%;
+    border: 1.5px solid #252b3a;
+  }
+  .notch-speaker {
+    width: 48px; height: 5px;
+    background: #1a1f2e;
+    border-radius: 3px;
+  }
+
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 48px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .scroll-area::-webkit-scrollbar { display: none; }
+
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.4rem 1.4rem 1.2rem;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
+  }
+
+  .stock-id {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .stock-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-top: 0.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .price {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    transition: color 0.4s ease;
+  }
+
+  .change-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 99px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-top: 0.45rem;
+    transition: background 0.4s, color 0.4s;
+  }
+  .change-badge.gain { background: rgba(255,59,92,0.12); color: var(--gain); }
+  .change-badge.loss { background: rgba(0,229,160,0.12); color: var(--loss); }
+  .change-badge.flat { background: rgba(74,85,104,0.2);  color: var(--muted); }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.85rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .stat-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    transition: color 0.4s;
+  }
+  .stat-value.gain-text { color: var(--gain); }
+  .stat-value.loss-text { color: var(--loss); }
+
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.1rem 1.1rem 0.8rem;
+    flex-shrink: 0;
+  }
+  .chart-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+  canvas#chart {
+    width: 100%;
+    height: 160px;
+    display: block;
+  }
+
+  .home-bar {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .home-pill {
+    width: 120px;
+    height: 5px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 99px;
+  }
+
+  @keyframes flash-gain {
+    0%   { text-shadow: 0 0 14px rgba(255,59,92,0.95); }
+    100% { text-shadow: none; }
+  }
+  @keyframes flash-loss {
+    0%   { text-shadow: 0 0 14px rgba(0,229,160,0.95); }
+    100% { text-shadow: none; }
+  }
+  .flash-gain { animation: flash-gain 0.7s ease-out; }
+  .flash-loss { animation: flash-loss 0.7s ease-out; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="notch">
+    <div class="notch-speaker"></div>
+    <div class="notch-cam"></div>
+  </div>
+
+  <div class="scroll-area">
+    <div class="hero">
+      <div class="stock-id">AAPL</div>
+      <div class="stock-name">Apple Inc. · NASDAQ</div>
+      <div class="price" id="heroPrice">—</div>
+      <div class="change-badge flat" id="heroBadge">—</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Open</div>
+        <div class="stat-value" id="statOpen">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Day High</div>
+        <div class="stat-value gain-text" id="statHigh">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Day Low</div>
+        <div class="stat-value loss-text" id="statLow">—</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-label">Price history · 60s</div>
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+  <div class="home-bar"><div class="home-pill"></div></div>
+</div>
+
+<script>
+  const OPEN_PRICE = 189.42;
+  let heroPrice = OPEN_PRICE;
+  let dayHigh   = OPEN_PRICE;
+  let dayLow    = OPEN_PRICE;
+  let history   = Array.from({ length: 60 }, () => OPEN_PRICE + (Math.random() - 0.5) * 4);
+  dayHigh = Math.max(...history);
+  dayLow  = Math.min(...history);
+
+  const canvas = document.getElementById('chart');
+  const ctx    = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width  = canvas.offsetWidth  * devicePixelRatio;
+    canvas.height = canvas.offsetHeight * devicePixelRatio;
+  }
+  window.addEventListener('resize', () => { resizeCanvas(); drawChart(); });
+  resizeCanvas();
+
+  function drawChart() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    const min    = Math.min(...history) - 0.5;
+    const max    = Math.max(...history) + 0.5;
+    const rangeY = max - min || 1;
+    const padX   = 6;
+    const toX = i => padX + (i / (history.length - 1)) * (W - padX * 2);
+    const toY = v => H - ((v - min) / rangeY) * (H * 0.88) - H * 0.06;
+
+    const isUp   = heroPrice >= OPEN_PRICE;
+    const colRGB = isUp ? '255,59,92' : '0,229,160';
+
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0,   `rgba(${colRGB},0.22)`);
+    grad.addColorStop(0.6, `rgba(${colRGB},0.04)`);
+    grad.addColorStop(1,   `rgba(${colRGB},0)`);
+
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(history[0]));
+    for (let i = 1; i < history.length; i++) {
+      const cpX = (toX(i-1) + toX(i)) / 2;
+      ctx.bezierCurveTo(cpX, toY(history[i-1]), cpX, toY(history[i]), toX(i), toY(history[i]));
+    }
+    ctx.lineTo(toX(history.length-1), H);
+    ctx.lineTo(toX(0), H);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(history[0]));
+    for (let i = 1; i < history.length; i++) {
+      const cpX = (toX(i-1) + toX(i)) / 2;
+      ctx.bezierCurveTo(cpX, toY(history[i-1]), cpX, toY(history[i]), toX(i), toY(history[i]));
+    }
+    ctx.strokeStyle = isUp ? 'rgba(255,59,92,0.9)' : 'rgba(0,229,160,0.9)';
+    ctx.lineWidth   = 2 * devicePixelRatio;
+    ctx.lineJoin    = 'round';
+    ctx.stroke();
+
+    const ex = toX(history.length-1), ey = toY(history[history.length-1]);
+    ctx.beginPath();
+    ctx.arc(ex, ey, 4 * devicePixelRatio, 0, Math.PI * 2);
+    ctx.fillStyle = isUp ? '#ff3b5c' : '#00e5a0';
+    ctx.fill();
+  }
+
+  function flash(el, dir) {
+    el.classList.remove('flash-gain', 'flash-loss');
+    void el.offsetWidth;
+    el.classList.add(dir === 'up' ? 'flash-gain' : 'flash-loss');
+  }
+
+  function update() {
+    const prev  = heroPrice;
+    heroPrice  += (Math.random() - 0.498) * (heroPrice * 0.0018);
+    heroPrice   = Math.max(heroPrice, 10);
+    dayHigh = Math.max(dayHigh, heroPrice);
+    dayLow  = Math.min(dayLow,  heroPrice);
+    history.push(heroPrice);
+    if (history.length > 60) history.shift();
+
+    const change    = heroPrice - OPEN_PRICE;
+    const changePct = (change / OPEN_PRICE) * 100;
+    const isUp      = change >= 0;
+    const dir       = heroPrice > prev ? 'up' : 'down';
+
+    const priceEl = document.getElementById('heroPrice');
+    priceEl.textContent = '$' + heroPrice.toFixed(2);
+    priceEl.style.color = isUp ? 'var(--gain)' : 'var(--loss)';
+    flash(priceEl, dir);
+
+    const badgeEl = document.getElementById('heroBadge');
+    badgeEl.textContent = `${isUp ? '▲' : '▼'} ${Math.abs(changePct).toFixed(2)}%  (${isUp?'+':''}${change.toFixed(2)})`;
+    badgeEl.className   = `change-badge ${isUp ? 'gain' : 'loss'}`;
+
+    document.getElementById('statOpen').textContent = '$' + OPEN_PRICE.toFixed(2);
+    document.getElementById('statHigh').textContent = '$' + dayHigh.toFixed(2);
+    document.getElementById('statLow').textContent  = '$' + dayLow.toFixed(2);
+
+    drawChart();
+  }
+
+  update();
+  setInterval(update, 1200); // 改 3000
+</script>
+</body>
+</html>

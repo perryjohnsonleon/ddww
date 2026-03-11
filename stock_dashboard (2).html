@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .last-update {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .stock-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stock-detail.positive::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: #ef4444;
+        }
+
+        .stock-detail.negative::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: #10b981;
+        }
+
+        .stock-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stock-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .stock-symbol {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stock-name {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .stock-price {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .stock-change {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .stock-change.positive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .stock-change.negative {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .stock-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stock-price {
+                font-size: 2.5rem;
+            }
+
+            .stock-symbol {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+        </div>
+
+        <div class="controls">
+            <button class="btn active" onclick="toggleAutoUpdate()">
+                <span id="autoUpdateBtn">⏸ Pause Updates</span>
+            </button>
+            <button class="btn" onclick="refreshData()">🔄 Refresh Now</button>
+            <button class="btn" onclick="changeStock()">🔄 Change Stock</button>
+        </div>
+
+        <div class="stock-detail" id="stockDetail">
+            <div class="stock-main">
+                <div class="stock-info">
+                    <div class="stock-symbol" id="stockSymbol">AAPL</div>
+                    <div class="stock-name" id="stockName">Apple Inc.</div>
+                    <div class="stock-price pulse" id="stockPrice">$178.50</div>
+                    <span class="stock-change positive" id="stockChange">▲ $0.00 (0.00%)</span>
+                </div>
+            </div>
+
+            <div class="stock-metrics">
+                <div class="metric-item">
+                    <div class="metric-label">Open</div>
+                    <div class="metric-value" id="metricOpen">$0.00</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">High</div>
+                    <div class="metric-value" id="metricHigh">$0.00</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Low</div>
+                    <div class="metric-value" id="metricLow">$0.00</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Volume</div>
+                    <div class="metric-value" id="metricVolume">0.0M</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Prev Close</div>
+                    <div class="metric-value" id="metricPrevClose">$0.00</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Market Cap</div>
+                    <div class="metric-value" id="metricMarketCap">$0.0B</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Market Overview</div>
+            </div>
+            <canvas id="marketChart" class="chart-canvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Stock data
+        const stockPool = [
+            { symbol: 'AAPL', name: 'Apple Inc.', price: 178.50, marketCap: 2800 },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.', price: 142.30, marketCap: 1780 },
+            { symbol: 'MSFT', name: 'Microsoft Corp.', price: 412.80, marketCap: 3070 },
+            { symbol: 'AMZN', name: 'Amazon.com Inc.', price: 178.25, marketCap: 1850 },
+            { symbol: 'TSLA', name: 'Tesla Inc.', price: 248.50, marketCap: 790 },
+            { symbol: 'NVDA', name: 'NVIDIA Corp.', price: 875.30, marketCap: 2160 }
+        ];
+
+        let currentStockIndex = 0;
+        let currentStock = null;
+        let autoUpdate = true;
+        let updateInterval;
+
+        // Initialize stock
+        function initializeStock() {
+            const stockData = stockPool[currentStockIndex];
+            currentStock = {
+                ...stockData,
+                change: 0,
+                percentChange: 0,
+                volume: Math.floor(Math.random() * 100000000) + 10000000,
+                open: stockData.price,
+                prevClose: stockData.price * (1 - (Math.random() - 0.5) * 0.01),
+                high: stockData.price * (1 + Math.random() * 0.02),
+                low: stockData.price * (1 - Math.random() * 0.02),
+                history: Array(30).fill(stockData.price).map((p, i) => 
+                    p + (Math.random() - 0.5) * p * 0.03
+                )
+            };
+        }
+
+        // Update stock price
+        function updateStockPrice() {
+            const volatility = 0.008; // 0.8% max change per update
+            const randomChange = (Math.random() - 0.5) * 2 * volatility;
+            const newPrice = currentStock.price * (1 + randomChange);
+            
+            currentStock.price = newPrice;
+            currentStock.change = newPrice - currentStock.open;
+            currentStock.percentChange = (currentStock.change / currentStock.open) * 100;
+            
+            // Update high/low
+            if (newPrice > currentStock.high) currentStock.high = newPrice;
+            if (newPrice < currentStock.low) currentStock.low = newPrice;
+            
+            // Update volume
+            currentStock.volume += Math.floor(Math.random() * 1000000);
+            
+            // Update history
+            currentStock.history.push(newPrice);
+            if (currentStock.history.length > 60) currentStock.history.shift();
+            
+            updateLastUpdateTime();
+            renderStock();
+            updateMarketChart();
+        }
+
+        // Render stock details
+        function renderStock() {
+            const isPositive = currentStock.change >= 0;
+            const changeSymbol = isPositive ? '▲' : '▼';
+            
+            document.getElementById('stockSymbol').textContent = currentStock.symbol;
+            document.getElementById('stockName').textContent = currentStock.name;
+            document.getElementById('stockPrice').textContent = `$${currentStock.price.toFixed(2)}`;
+            
+            const changeEl = document.getElementById('stockChange');
+            changeEl.textContent = `${changeSymbol} $${Math.abs(currentStock.change).toFixed(2)} (${currentStock.percentChange.toFixed(2)}%)`;
+            changeEl.className = `stock-change ${isPositive ? 'positive' : 'negative'}`;
+            
+            const detailEl = document.getElementById('stockDetail');
+            detailEl.className = `stock-detail ${isPositive ? 'positive' : 'negative'}`;
+            
+            // Update metrics
+            document.getElementById('metricOpen').textContent = `$${currentStock.open.toFixed(2)}`;
+            document.getElementById('metricHigh').textContent = `$${currentStock.high.toFixed(2)}`;
+            document.getElementById('metricLow').textContent = `$${currentStock.low.toFixed(2)}`;
+            document.getElementById('metricVolume').textContent = `${(currentStock.volume / 1000000).toFixed(1)}M`;
+            document.getElementById('metricPrevClose').textContent = `$${currentStock.prevClose.toFixed(2)}`;
+            document.getElementById('metricMarketCap').textContent = `$${currentStock.marketCap}B`;
+        }
+
+        // Draw market chart
+        function updateMarketChart() {
+            const canvas = document.getElementById('marketChart');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth * 2;
+            canvas.height = canvas.offsetHeight * 2;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const padding = 60;
+            const chartWidth = canvas.width - padding * 2;
+            const chartHeight = canvas.height - padding * 2;
+            
+            const data = currentStock.history;
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const range = max - min || 1;
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (chartHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(canvas.width - padding, y);
+                ctx.stroke();
+                
+                // Y-axis labels
+                const value = max - (range / 5) * i;
+                ctx.fillStyle = '#666';
+                ctx.font = '24px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(`$${value.toFixed(2)}`, padding - 10, y + 8);
+            }
+            
+            // Draw line
+            ctx.beginPath();
+            ctx.lineWidth = 4;
+            const isPositive = currentStock.change >= 0;
+            ctx.strokeStyle = isPositive ? '#ef4444' : '#10b981';
+            
+            const stepX = chartWidth / (data.length - 1);
+            
+            data.forEach((value, i) => {
+                const x = padding + i * stepX;
+                const y = canvas.height - padding - ((value - min) / range) * chartHeight;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Draw area under line
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.closePath();
+            ctx.fillStyle = isPositive ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)';
+            ctx.fill();
+            
+            // Draw current price indicator
+            const lastValue = data[data.length - 1];
+            const lastY = canvas.height - padding - ((lastValue - min) / range) * chartHeight;
+            
+            ctx.beginPath();
+            ctx.arc(canvas.width - padding, lastY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = isPositive ? '#ef4444' : '#10b981';
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Chart title
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 28px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`${currentStock.symbol} Price Movement`, padding, 40);
+        }
+
+        // Update timestamp
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = timeString;
+        }
+
+        // Toggle auto-update
+        function toggleAutoUpdate() {
+            autoUpdate = !autoUpdate;
+            const btn = document.getElementById('autoUpdateBtn');
+            
+            if (autoUpdate) {
+                btn.textContent = '⏸ Pause Updates';
+                startAutoUpdate();
+            } else {
+                btn.textContent = '▶ Resume Updates';
+                clearInterval(updateInterval);
+            }
+        }
+
+        // Start auto-update
+        function startAutoUpdate() {
+            updateInterval = setInterval(() => {
+                if (autoUpdate) {
+                    updateStockPrice();
+                }
+            }, 2000); // Update every 2 seconds
+        }
+
+        // Refresh data manually
+        function refreshData() {
+            updateStockPrice();
+        }
+
+        // Change to next stock
+        function changeStock() {
+            currentStockIndex = (currentStockIndex + 1) % stockPool.length;
+            initializeStock();
+            renderStock();
+            updateMarketChart();
+        }
+
+        // Initialize dashboard
+        initializeStock();
+        renderStock();
+        updateMarketChart();
+        updateLastUpdateTime();
+        startAutoUpdate();
+    </script>
+</body>
+</html>
