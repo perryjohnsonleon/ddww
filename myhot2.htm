@@ -308,6 +308,16 @@
     grad.addColorStop(0.6, `rgba(${colRGB},0.04)`);
     grad.addColorStop(1,   `rgba(${colRGB},0)`);
 
+	const midY = toY(OPEN_PRICE);
+	ctx.beginPath();
+	ctx.setLineDash([4, 4]);
+	ctx.moveTo(padX, midY);
+	ctx.lineTo(W - padX, midY);
+	ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+	ctx.lineWidth = 3 * devicePixelRatio;
+	ctx.stroke();
+	ctx.setLineDash([]); // reset dash
+
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(history[0]));
     for (let i = 1; i < history.length; i++) {
