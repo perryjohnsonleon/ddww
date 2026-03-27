@@ -538,7 +538,7 @@
       const count = Math.min(times, 12);
 
       for (let i = 0; i < count; i++) {
-        const delay = i * 1.44;
+        const delay = i * 0.72;
         notes.forEach((freq, ni) => {
           const t = ctx.currentTime + delay + ni * 0.11;
           // Oscillator (bell tone)
@@ -552,7 +552,7 @@
           gain.gain.linearRampToValueAtTime(0.18, t + 0.01);
           gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
           osc.start(t);
-          osc.stop(t + 5.8);
+          osc.stop(t + 1.8);
 
           // Subtle harmonic overtone
           const osc2 = ctx.createOscillator();
