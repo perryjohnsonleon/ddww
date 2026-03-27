@@ -374,7 +374,7 @@
   <!-- Mute toggle -->
   <button class="chime-btn" id="chimeBtn" title="Toggle hourly chime">
     <span class="icon" id="chimeIcon">🔔</span>
-    <span id="chimeLbl">CHIME ON</span>
+    <span id="chimeLbl">響音狀</span>
   </button>
 
   <div class="clock-wrapper">
@@ -608,7 +608,7 @@
       const lbl  = document.getElementById('chimeLbl');
       btn.classList.toggle('muted', chimeMuted);
       icon.textContent = chimeMuted ? '🔕' : '🔔';
-      lbl.textContent  = chimeMuted ? '靜音態' : '響音態';
+      lbl.textContent  = chimeMuted ? '靜音狀' : '響音狀';
     });
 
     // Preview chime on page load after a short delay (unlocks audio context too)
