@@ -589,7 +589,7 @@
     // Check for top-of-hour (runs inside the existing update loop via a separate interval)
     setInterval(() => {
       const now = new Date();
-      if (now.getMinutes() === 30 && now.getSeconds() === 0) {
+      if (now.getMinutes() === 40 && now.getSeconds() === 0) {
         const h = now.getHours();
         if (h !== lastChimeHour) {
           lastChimeHour = h;
