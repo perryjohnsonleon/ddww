@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>▲▲▲▲亞泥語音報價</title>
+  <title>▲▲▲▲大盤語音報價</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,7 +15,17 @@
       --glow2: #ff2d78;
       --dim: #0a2a30;
       --text: #e0faff;
-      --tick: #1a3a45;
+      --tick: #1a3a45;	  
+	  --surface: #0d1117;
+	  --border: rgba(255,255,255,0.06);
+	  --muted: #4a5068;
+	  --gain: #ff1744;
+	  --loss: #00e676;
+	  --gain-dim: rgba(255,23,68,0.08);
+	  --loss-dim: rgba(0,230,118,0.08);
+	  --accent: #5c7cfa;
+	  --accent-dim: rgba(92,124,250,0.12);
+	  --grid: rgba(255,255,255,0.025);
     }
 
     body {
@@ -162,6 +172,52 @@
       background: var(--glow2);
       box-shadow: 0 0 6px var(--glow2), 0 0 16px rgba(255,45,120,0.4);
     }
+	
+  /* ── STATS GRID ─────────────────────────────── */
+	 .stats-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 3px;
+		margin-bottom: 4px;
+	 }
+
+	 .stat-card {
+		display:flex;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 8px 10px;
+		position: relative;
+		overflow: hidden;
+		transition: border-color 0.3s;
+	 }
+
+    .stat-card:hover { border-color: rgba(255,255,255,0.12); }
+	.stat-label {
+		font-size: 0.62rem;
+		color: var(--muted);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		margin-bottom: 4px;
+	  }
+
+	.stat-value {
+		font-family: 'Syne', sans-serif;
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: #fff;
+		transition: color 0.4s;
+	  }
+
+	.stat-sub {
+		font-size: 0.64rem;
+		color: var(--muted);
+		margin-top: 4px;
+	  }
+
+	.gain-text { color: var(--gain); }
+	.loss-text { color: var(--loss); }
+	.change-text { color: var(--loss); }	
 
     /* Center dot */
     .center-dot {
@@ -359,6 +415,7 @@
     .chime-flash.active {
       opacity: 1;
     }
+	
   </style>
 </head>
 <body>
@@ -368,19 +425,28 @@
 
   <!-- Chime flash overlay -->
   <div class="chime-flash" id="chimeFlash"></div>
-
   <!-- Chime toast -->
   <div class="chime-toast" id="chimeToast">⬡ On the Hour</div>
 
   <!-- Mute toggle -->
+   <div class="stats-grid">
+		<div class="stat-card">
+		  <div class="stat-value gain-text" id="statName1"></div>
+		  <div class="stat-value gain-text" id="statClose1">—</div>
+		  <div class="stat-value loss-text" id="statChang1">—</div>
+		</div>
+		<div class="stat-card">
+		  <div class="stat-value gain-text" id="statName2"></div>
+		  <div class="stat-value gain-text" id="statClose2">—</div>
+		  <div class="stat-value loss-text" id="statChang2">—</div>	  
+		</div>
+  </div>
   <button class="chime-btn" id="chimeBtn" title="Toggle hourly chime">
     <span class="icon" id="chimeIcon">🔔</span>
     <span id="chimeLbl">CHIME ON</span>
   </button>
 
   <div class="clock-wrapper">
-
-
 
     <!-- Analog -->
     <div class="analog-wrap">
@@ -606,7 +672,7 @@
 
     // Check for top-of-hour (runs inside the existing update loop via a separate interval)
     setInterval( async() => {
-	  let itemName,incdecPrice,itemPrice ;
+	  let itemName1,incdecPrice1,itemPrice1,itemName2,incdecPrice2,itemPrice2 ;
 	  const marketClosetime = "13:30:00"; 
 	  const [h, m, s] = marketClosetime.split(':').map(Number);
 	  const timeToSeconds= h * 3600 + m * 60 + s ;
@@ -616,19 +682,38 @@
 		 return 
 	  else   
 	     running=true ;
-	  const post = await getData(1102);
-	  if (post) {
-			const wi_o=post.data.o;
-			const wi_h=post.data.h;
-			const wi_c=post.data.c;
-			const quote_obj = post.data.quote ;
-			for ( var n in quote_obj) {
-			   if ( n == "200009" ) itemName=quote_obj[n] ;
-			   if ( n == "11" ) incdecPrice=quote_obj[n] ;
-			   if ( n == "6" ) itemPrice=quote_obj[n] ;
-			}					
+	  const post1 = await getData(2353);
+	  const post2 = await getData(1102);
+	  if (post1) {
+			const wi_o1=post1.data.o;
+			const wi_h1=post1.data.h;
+			const wi_c1=post1.data.c;
+			const quote_obj1 = post1.data.quote ;
+			for ( var n in quote_obj1) {
+			   if ( n == "200009" ) itemName1=quote_obj1[n] ;
+			   if ( n == "11" ) incdecPrice1=quote_obj1[n] ;
+			   if ( n == "6" ) itemPrice1=quote_obj1[n] ;
+			}
+		   document.getElementById('statName1').textContent = itemName1 ;
+		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
+		   document.getElementById('statChang1').textContent = incdecPrice1 ;			
 		}
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice)>0 ) {
+	  if (post2) {
+			const wi_o2=post2.data.o;
+			const wi_h2=post2.data.h;
+			const wi_c2=post2.data.c;
+			const quote_obj2 = post2.data.quote ;
+			for ( var n in quote_obj2) {
+			   if ( n == "200009" ) itemName2=quote_obj2[n] ;
+			   if ( n == "11" ) incdecPrice2=quote_obj2[n] ;
+			   if ( n == "6" ) itemPrice2=quote_obj2[n] ;
+			}
+		   document.getElementById('statName2').textContent = itemName2 ;
+		   document.getElementById('statClose2').textContent = '$' + itemPrice2 ;
+		   document.getElementById('statChang2').textContent = incdecPrice2 ;				
+		}
+		
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)>0.4 ) {
         const h = now.getHours();
 		triggerChime(h);
 		/*
