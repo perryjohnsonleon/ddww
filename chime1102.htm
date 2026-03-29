@@ -628,7 +628,7 @@
 			   if ( n == "6" ) itemPrice=quote_obj[n] ;
 			}					
 		}
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice)>0 ) {
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice)>0.4 ) {
         const h = now.getHours();
 		triggerChime(h);
 		/*
