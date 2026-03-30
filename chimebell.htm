@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>▲▲▲▲大盤語音報價</title>
+  <title>▲▲▲▲熱股大盤聲音報價</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,6 +20,7 @@
 	  --border: rgba(255,255,255,0.06);
 	  --muted: #4a5068;
 	  --label: #e0faff;
+	  --wilabel: #4a5068;	  
 	  --gain: #ff1744;
 	  --loss: #00e676;
 	  --gain-dim: rgba(255,23,68,0.08);
@@ -197,18 +198,32 @@
     .stat-card:hover { border-color: rgba(255,255,255,0.12); }
 	.stat-label {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.8rem;
-		//font-weight: 600;
+		font-size: 1.3rem;
+		font-weight: 600;
 		color: var(--label);
 		transition: color 0.4s;
+		display:flex;
+		align-items:flex-end;
+	  }
+	  
+	  .wi-label {
+		font-family: 'Syne', sans-serif;
+		font-size: 0.6rem;
+		font-weight: 600;
+		color: var(--wilabel);
+		transition: color 0.4s;
+		display:flex;
+		align-items:center;
 	  }
 
 	.stat-value {
 		font-family: 'Syne', sans-serif;
 		font-size: 1.3rem;
-		// font-weight: 600;
+		font-weight: 600;
 		color: #fff;
 		transition: color 0.4s;
+		display:flex;
+		align-items:flex-end;
 	  }
 
 	.stat-sub {
@@ -445,7 +460,7 @@
 		  <div class="stat-value loss-text" id="statChang2">—</div>	  
 		</div>
 		<div class="stat-card">
-		  <div class="stat-label label-text" id="statName3">—</div>
+		  <div class="wi-label label-text" id="statName3">—</div>
 		  <div class="stat-value gain-text" id="statClose3">—</div>
 		  <div class="stat-value loss-text" id="statChang3">—</div>	  
 		</div>
@@ -681,8 +696,8 @@
 
     // Check for top-of-hour (runs inside the existing update loop via a separate interval)
     setInterval( async() => {
-	  let itemName1,incdecPrice1,itemPrice1,itemName2,incdecPrice2,itemPrice2 ;
-	  const marketClosetime = "13:30:00"; 
+	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,incdectxtPrice2,itemPrice2 ;
+	  const marketClosetime = "23:30:00"; 
 	  const [h, m, s] = marketClosetime.split(':').map(Number);
 	  const timeToSeconds= h * 3600 + m * 60 + s ;
 	  const now = new Date();
@@ -691,8 +706,8 @@
 		 return 
 	  else   
 	     running=true ;
-	  const post1 = await getData(2353);
-	  const post2 = await getData(1102);
+	  const post1 = await getData(1102);
+	  const post2 = await getData(2353);
 	  const post3 = await getData(9999);	  
 	  if (post1) {
 			const wi_h=post1.data.h;
@@ -703,9 +718,12 @@
 			   if ( n == "11" ) incdecPrice1=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice1=quote_obj[n] ;
 			}
+		   if ( incdecPrice1>0 ) 
+				incdectxtPrice1="+" + incdecPrice1.toString()
+		   else incdectxtPrice1= incdecPrice1 ;	
 		   document.getElementById('statName1').textContent = itemName1 ;
 		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
-		   document.getElementById('statChang1').textContent = incdecPrice1 ;			
+		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;			
 		}
 	  if (post2) {
 			const wi_o=post2.data.o;
@@ -717,9 +735,12 @@
 			   if ( n == "11" ) incdecPrice2=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice2=quote_obj[n] ;
 			}
+		   if ( incdecPrice2>0 ) 
+				incdectxtPrice2="+" + incdecPrice2.toString()
+		   else incdectxtPrice2= incdecPrice2 ;
 		   document.getElementById('statName2').textContent = itemName2 ;
 		   document.getElementById('statClose2').textContent = '$' + itemPrice2 ;
-		   document.getElementById('statChang2').textContent = incdecPrice2 ;				
+		   document.getElementById('statChang2').textContent = incdectxtPrice2 ;				
 		}
 	  if (post3) {
 			const wi_o=post3.data.o;
@@ -731,13 +752,12 @@
 			   if ( n == "11" ) incdecPrice3=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice3=quote_obj[n] ;
 			}
-		   console.log("itemName3==",itemName3);
-		   document.getElementById('statName3').textContent = itemName3.substring(4, 4) ;
-		   document.getElementById('statClose3').textContent = '$' + itemPrice3 ;
+		   document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
+		   document.getElementById('statClose3').textContent = itemPrice3 ;
 		   document.getElementById('statChang3').textContent = incdecPrice3 ;				
 		}
 		
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)<0.3 ) {
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)>0.8 ) {
         const h = now.getHours();
 		triggerChime(h);
 		/*
