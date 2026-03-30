@@ -697,7 +697,7 @@
     // Check for top-of-hour (runs inside the existing update loop via a separate interval)
     setInterval( async() => {
 	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,incdectxtPrice2,itemPrice2 ;
-	  const marketClosetime = "23:30:00"; 
+	  const marketClosetime = "13:30:00"; 
 	  const [h, m, s] = marketClosetime.split(':').map(Number);
 	  const timeToSeconds= h * 3600 + m * 60 + s ;
 	  const now = new Date();
