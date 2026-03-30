@@ -19,6 +19,7 @@
 	  --surface: #0d1117;
 	  --border: rgba(255,255,255,0.06);
 	  --muted: #4a5068;
+	  --label: #e0faff;
 	  --gain: #ff1744;
 	  --loss: #00e676;
 	  --gain-dim: rgba(255,23,68,0.08);
@@ -182,7 +183,8 @@
 	 }
 
 	 .stat-card {
-		display:flex;
+	 	display:flex;
+		vertical-align: auto;
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: 12px;
@@ -194,17 +196,17 @@
 
     .stat-card:hover { border-color: rgba(255,255,255,0.12); }
 	.stat-label {
-		font-size: 0.62rem;
-		color: var(--muted);
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		margin-bottom: 4px;
+		font-family: 'Syne', sans-serif;
+		font-size: 0.8rem;
+		//font-weight: 600;
+		color: var(--label);
+		transition: color 0.4s;
 	  }
 
 	.stat-value {
 		font-family: 'Syne', sans-serif;
 		font-size: 1.3rem;
-		font-weight: 600;
+		// font-weight: 600;
 		color: #fff;
 		transition: color 0.4s;
 	  }
@@ -215,6 +217,8 @@
 		margin-top: 4px;
 	  }
 
+	.label-text { color: var(--label); }
+	.loss-text { color: var(--loss); }
 	.gain-text { color: var(--gain); }
 	.loss-text { color: var(--loss); }
 	.change-text { color: var(--loss); }	
@@ -431,14 +435,19 @@
   <!-- Mute toggle -->
    <div class="stats-grid">
 		<div class="stat-card">
-		  <div class="stat-value gain-text" id="statName1"></div>
+		  <div class="stat-label label-text" id="statName1">—</div>
 		  <div class="stat-value gain-text" id="statClose1">—</div>
 		  <div class="stat-value loss-text" id="statChang1">—</div>
 		</div>
 		<div class="stat-card">
-		  <div class="stat-value gain-text" id="statName2"></div>
+		  <div class="stat-label label-text" id="statName2">—</div>
 		  <div class="stat-value gain-text" id="statClose2">—</div>
 		  <div class="stat-value loss-text" id="statChang2">—</div>	  
+		</div>
+		<div class="stat-card">
+		  <div class="stat-label label-text" id="statName3">—</div>
+		  <div class="stat-value gain-text" id="statClose3">—</div>
+		  <div class="stat-value loss-text" id="statChang3">—</div>	  
 		</div>
   </div>
   <button class="chime-btn" id="chimeBtn" title="Toggle hourly chime">
@@ -684,33 +693,48 @@
 	     running=true ;
 	  const post1 = await getData(2353);
 	  const post2 = await getData(1102);
+	  const post3 = await getData(9999);	  
 	  if (post1) {
-			const wi_o1=post1.data.o;
-			const wi_h1=post1.data.h;
-			const wi_c1=post1.data.c;
-			const quote_obj1 = post1.data.quote ;
-			for ( var n in quote_obj1) {
-			   if ( n == "200009" ) itemName1=quote_obj1[n] ;
-			   if ( n == "11" ) incdecPrice1=quote_obj1[n] ;
-			   if ( n == "6" ) itemPrice1=quote_obj1[n] ;
+			const wi_h=post1.data.h;
+			const wi_c=post1.data.c;
+			const quote_obj = post1.data.quote ;
+			for ( var n in quote_obj) {
+			   if ( n == "200009" ) itemName1=quote_obj[n] ;
+			   if ( n == "11" ) incdecPrice1=quote_obj[n] ;
+			   if ( n == "6" ) itemPrice1=quote_obj[n] ;
 			}
 		   document.getElementById('statName1').textContent = itemName1 ;
 		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
 		   document.getElementById('statChang1').textContent = incdecPrice1 ;			
 		}
 	  if (post2) {
-			const wi_o2=post2.data.o;
-			const wi_h2=post2.data.h;
-			const wi_c2=post2.data.c;
-			const quote_obj2 = post2.data.quote ;
-			for ( var n in quote_obj2) {
-			   if ( n == "200009" ) itemName2=quote_obj2[n] ;
-			   if ( n == "11" ) incdecPrice2=quote_obj2[n] ;
-			   if ( n == "6" ) itemPrice2=quote_obj2[n] ;
+			const wi_o=post2.data.o;
+			const wi_h=post2.data.h;
+			const wi_c=post2.data.c;
+			const quote_obj = post2.data.quote ;
+			for ( var n in quote_obj) {
+			   if ( n == "200009" ) itemName2=quote_obj[n] ;
+			   if ( n == "11" ) incdecPrice2=quote_obj[n] ;
+			   if ( n == "6" ) itemPrice2=quote_obj[n] ;
 			}
 		   document.getElementById('statName2').textContent = itemName2 ;
 		   document.getElementById('statClose2').textContent = '$' + itemPrice2 ;
 		   document.getElementById('statChang2').textContent = incdecPrice2 ;				
+		}
+	  if (post3) {
+			const wi_o=post3.data.o;
+			const wi_h=post3.data.h;
+			const wi_c=post3.data.c;
+			const quote_obj = post3.data.quote ;
+			for ( var n in quote_obj) {
+			   if ( n == "200009" ) itemName3=quote_obj[n] ;
+			   if ( n == "11" ) incdecPrice3=quote_obj[n] ;
+			   if ( n == "6" ) itemPrice3=quote_obj[n] ;
+			}
+		   console.log("itemName3==",itemName3);
+		   document.getElementById('statName3').textContent = itemName3.substring(4, 4) ;
+		   document.getElementById('statClose3').textContent = '$' + itemPrice3 ;
+		   document.getElementById('statChang3').textContent = incdecPrice3 ;				
 		}
 		
       if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)<0.3 ) {
