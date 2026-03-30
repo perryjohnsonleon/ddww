@@ -713,7 +713,7 @@
 		   document.getElementById('statChang2').textContent = incdecPrice2 ;				
 		}
 		
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)>0.4 ) {
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)<0.3 ) {
         const h = now.getHours();
 		triggerChime(h);
 		/*
