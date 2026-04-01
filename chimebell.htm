@@ -510,9 +510,6 @@
         <div class="date-chip" id="dateStr">01 Jan 2025</div>
       </div>
     </div>
-
-
-
   </div>
 
   <script>
@@ -693,21 +690,11 @@
 		  return result; // ← 正確把值傳出去 
 	    }
 	 }
-
-    // Check for top-of-hour (runs inside the existing update loop via a separate interval)
-    setInterval( async() => {
-	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,incdectxtPrice2,itemPrice2 ;
-	  const marketClosetime = "13:30:00"; 
-	  const [h, m, s] = marketClosetime.split(':').map(Number);
-	  const timeToSeconds= h * 3600 + m * 60 + s ;
-	  const now = new Date();
-	  const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();	
-	  if (nowSeconds > timeToSeconds ) 
-		 return 
-	  else   
-	     running=true ;
-	  const post1 = await getData(1102);
-	  const post2 = await getData(2353);
+	 
+	 async function graphcardRender() {
+	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,itemPrice2,incdectxtPrice2,itemName3,incdecPrice3,itemPrice3,incdectxtPrice3 ;
+	  const post1 = await getData(2353);
+	  const post2 = await getData(1102);
 	  const post3 = await getData(9999);	  
 	  if (post1) {
 			const wi_h=post1.data.h;
@@ -752,12 +739,83 @@
 			   if ( n == "11" ) incdecPrice3=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice3=quote_obj[n] ;
 			}
+		    if ( incdecPrice3>0 ) 
+				incdectxtPrice3="+" + incdecPrice3.toString()
+		   else incdectxtPrice3= incdecPrice3 ;		
 		   document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
 		   document.getElementById('statClose3').textContent = itemPrice3 ;
-		   document.getElementById('statChang3').textContent = incdecPrice3 ;				
+		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;				
+		}
+    }
+
+    // Check for top-of-hour (runs inside the existing update loop via a separate interval)
+	graphcardRender();
+    setInterval(async() => {
+	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,itemPrice2,incdectxtPrice2,itemName3,incdecPrice3,itemPrice3,incdectxtPrice3 ;
+	  const marketClosetime = "13:30:00"; 
+	  const [h, m, s] = marketClosetime.split(':').map(Number);
+	  const timeToSeconds= h * 3600 + m * 60 + s ;
+	  const now = new Date();
+	  const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();	
+	  if (nowSeconds > timeToSeconds ) 
+		 return 
+	  else   
+	     running=true ;
+	  const post1 = await getData(2353);
+	  const post2 = await getData(1102);
+	  const post3 = await getData(9999);	  
+	  if (post1) {
+			const wi_h=post1.data.h;
+			const wi_c=post1.data.c;
+			const quote_obj = post1.data.quote ;
+			for ( var n in quote_obj) {
+			   if ( n == "200009" ) itemName1=quote_obj[n] ;
+			   if ( n == "11" ) incdecPrice1=quote_obj[n] ;
+			   if ( n == "6" ) itemPrice1=quote_obj[n] ;
+			}
+		   if ( incdecPrice1>0 ) 
+				incdectxtPrice1="+" + incdecPrice1.toString()
+		   else incdectxtPrice1= incdecPrice1 ;	
+		   document.getElementById('statName1').textContent = itemName1 ;
+		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
+		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;			
+		}
+	  if (post2) {
+			const wi_o=post2.data.o;
+			const wi_h=post2.data.h;
+			const wi_c=post2.data.c;
+			const quote_obj = post2.data.quote ;
+			for ( var n in quote_obj) {
+			   if ( n == "200009" ) itemName2=quote_obj[n] ;
+			   if ( n == "11" ) incdecPrice2=quote_obj[n] ;
+			   if ( n == "6" ) itemPrice2=quote_obj[n] ;
+			}
+		   if ( incdecPrice2>0 ) 
+				incdectxtPrice2="+" + incdecPrice2.toString()
+		   else incdectxtPrice2= incdecPrice2 ;
+		   document.getElementById('statName2').textContent = itemName2 ;
+		   document.getElementById('statClose2').textContent = '$' + itemPrice2 ;
+		   document.getElementById('statChang2').textContent = incdectxtPrice2 ;				
+		}
+	  if (post3) {
+			const wi_o=post3.data.o;
+			const wi_h=post3.data.h;
+			const wi_c=post3.data.c;
+			const quote_obj = post3.data.quote ;
+			for ( var n in quote_obj) {
+			   if ( n == "200009" ) itemName3=quote_obj[n] ;
+			   if ( n == "11" ) incdecPrice3=quote_obj[n] ;
+			   if ( n == "6" ) itemPrice3=quote_obj[n] ;
+			}
+		   if ( incdecPrice3>0 ) 
+				incdectxtPrice3="+" + incdecPrice3.toString()
+		   else incdectxtPrice3= incdecPrice3 ;
+		   document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
+		   document.getElementById('statClose3').textContent = itemPrice3 ;
+		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;				
 		}
 		
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && Math.abs(incdecPrice1)>0.8 ) {
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && ( Math.abs(incdecPrice1)>0.5 || Math.abs(incdecPrice2)>0.5) ){
         const h = now.getHours();
 		triggerChime(h);
 		/*
