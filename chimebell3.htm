@@ -21,8 +21,9 @@
 	  --muted: #4a5068;
 	  --label: #e0faff;
 	  --wilabel: #4a5068;	  
-	  --gain: #ff1744;
-	  --loss: #00e676;
+	  --close: #ff1744;
+	  --change: #00e676;
+	  --tips: #ffB300;  
 	  --gain-dim: rgba(255,23,68,0.08);
 	  --loss-dim: rgba(0,230,118,0.08);
 	  --accent: #5c7cfa;
@@ -178,9 +179,9 @@
   /* ── STATS GRID ─────────────────────────────── */
 	 .stats-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 3px;
-		margin-bottom: 4px;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2px;
+		margin-bottom: 2px;
 	 }
 
 	 .stat-card {
@@ -206,10 +207,10 @@
 		align-items:flex-end;
 	  }
 	  
-	  .wi-label {
+	 .wi-label {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.6rem;
-		font-weight: 600;
+		font-size: 0.9rem;
+		font-weight: 400;
 		color: var(--wilabel);
 		transition: color 0.4s;
 		display:flex;
@@ -222,6 +223,7 @@
 		font-weight: 600;
 		color: #fff;
 		transition: color 0.4s;
+		padding:0 4px;
 		display:flex;
 		align-items:flex-end;
 	  }
@@ -232,11 +234,26 @@
 		margin-top: 4px;
 	  }
 
+	.risePrice {
+		color: #F30E4B;
+	}
+
+	.fellPrice {
+		color: #1DC91D;
+	}
+
+	.flatPrice {
+		color:#c3dbbd;
+	}
+
+	.wi-risePrice {
+		color: #F30E4B;
+  
+	}
 	.label-text { color: var(--label); }
-	.loss-text { color: var(--loss); }
-	.gain-text { color: var(--gain); }
-	.loss-text { color: var(--loss); }
-	.change-text { color: var(--loss); }	
+	.close-text { color: var(--close); }
+	.change-text { color: var(--change); }
+	.tips-text { color: var(--tips); }		
 
     /* Center dot */
     .center-dot {
@@ -451,18 +468,24 @@
    <div class="stats-grid">
 		<div class="stat-card">
 		  <div class="stat-label label-text" id="statName1">—</div>
-		  <div class="stat-value gain-text" id="statClose1">—</div>
-		  <div class="stat-value loss-text" id="statChang1">—</div>
+		  <div class="stat-value" id="statClose1">—</div>
+		  <div class="stat-value" id="statChang1">—</div>
+		  <div class="stat-value tips-text" id="statHigh1">—</div>
+		  <div class="stat-value tips-text" id="statLow1">—</div>		  
 		</div>
 		<div class="stat-card">
 		  <div class="stat-label label-text" id="statName2">—</div>
-		  <div class="stat-value gain-text" id="statClose2">—</div>
-		  <div class="stat-value loss-text" id="statChang2">—</div>	  
+		  <div class="stat-value" id="statClose2">—</div>
+		  <div class="stat-value" id="statChang2">—</div>
+		  <div class="stat-value tips-text" id="statHigh2">—</div>
+		  <div class="stat-value tips-text" id="statLow2">—</div>			  
 		</div>
 		<div class="stat-card">
 		  <div class="wi-label label-text" id="statName3">—</div>
-		  <div class="stat-value gain-text" id="statClose3">—</div>
-		  <div class="stat-value loss-text" id="statChang3">—</div>	  
+		  <div class="stat-value" id="statClose3">—</div>
+		  <div class="stat-value" id="statChang3">—</div>
+		  <div class="stat-value tips-text" id="statHigh3">—</div>
+		  <div class="stat-value tips-text" id="statLow3">—</div>				  
 		</div>
   </div>
   <button class="chime-btn" id="chimeBtn" title="Toggle hourly chime">
@@ -693,6 +716,7 @@
 	 
 	 async function graphcardRender() {
 	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,itemPrice2,incdectxtPrice2,itemName3,incdecPrice3,itemPrice3,incdectxtPrice3 ;
+	  let highPrice1,lowPrice1,highPrice2,lowPrice2,highPrice3,lowPrice3;
 	  const post1 = await getData(2353);
 	  const post2 = await getData(1102);
 	  const post3 = await getData(9999);	  
@@ -703,14 +727,32 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName1=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice1=quote_obj[n] ;
+			   if ( n == "12" ) highPrice1=quote_obj[n] ;
+			   if ( n == "13" ) lowPrice1=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice1=quote_obj[n] ;
 			}
 		   if ( incdecPrice1>0 ) 
 				incdectxtPrice1="+" + incdecPrice1.toString()
-		   else incdectxtPrice1= incdecPrice1 ;	
+		   else incdectxtPrice1= incdecPrice1 ;
+		   if ( incdecPrice1> 0) {
+					document.getElementById('statClose1').classList.add('risePrice');
+					document.getElementById('statChang1').classList.add('risePrice');
+				} 
+		   else {
+				if ( incdecPrice1 === 0){ 
+					document.getElementById('statClose1').classList.add('flatPrice');
+					document.getElementById('statChang1').classList.add('flatPrice');
+					}
+				else {
+					document.getElementById('statClose1').classList.add('fellPrice');
+					document.getElementById('statChang1').classList.add('fellPrice');	
+					}
+		   }		   
 		   document.getElementById('statName1').textContent = itemName1 ;
 		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
-		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;			
+		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;
+		   document.getElementById('statHigh1').textContent = highPrice1 ;		   
+		   document.getElementById('statLow1').textContent = lowPrice1 ;		   
 		}
 	  if (post2) {
 			const wi_o=post2.data.o;
@@ -720,14 +762,32 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName2=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice2=quote_obj[n] ;
+			   if ( n == "12" ) highPrice2=quote_obj[n] ;
+			   if ( n == "13" ) lowPrice2=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice2=quote_obj[n] ;
 			}
 		   if ( incdecPrice2>0 ) 
 				incdectxtPrice2="+" + incdecPrice2.toString()
 		   else incdectxtPrice2= incdecPrice2 ;
+		   if ( incdecPrice2> 0) {
+					document.getElementById('statClose2').classList.add('risePrice');
+					document.getElementById('statChang2').classList.add('risePrice');
+				} 
+		   else {
+				if ( incdecPrice2 === 0){ 
+					document.getElementById('statClose2').classList.add('flatPrice');
+					document.getElementById('statChang2').classList.add('flatPrice');
+					}
+				else {
+					document.getElementById('statClose2').classList.add('fellPrice');
+					document.getElementById('statChang2').classList.add('fellPrice');	
+					}
+		   }
 		   document.getElementById('statName2').textContent = itemName2 ;
 		   document.getElementById('statClose2').textContent = '$' + itemPrice2 ;
-		   document.getElementById('statChang2').textContent = incdectxtPrice2 ;				
+		   document.getElementById('statChang2').textContent = incdectxtPrice2 ;
+		   document.getElementById('statHigh2').textContent = highPrice2 ;		   
+		   document.getElementById('statLow2').textContent = lowPrice2 ;		   
 		}
 	  if (post3) {
 			const wi_o=post3.data.o;
@@ -737,14 +797,32 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName3=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice3=quote_obj[n] ;
+			   if ( n == "12" ) highPrice3=quote_obj[n] ;
+			   if ( n == "13" ) lowPrice3=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice3=quote_obj[n] ;
 			}
-		    if ( incdecPrice3>0 ) 
+		   if ( incdecPrice3>0 ) 
 				incdectxtPrice3="+" + incdecPrice3.toString()
-		   else incdectxtPrice3= incdecPrice3 ;		
+		   else incdectxtPrice3= incdecPrice3 ;
+		   if ( incdecPrice3> 0) {
+					document.getElementById('statClose3').classList.add('risePrice');
+					document.getElementById('statChang3').classList.add('risePrice');
+				} 
+		   else {
+				if ( incdecPrice3 === 0){ 
+					document.getElementById('statClose3').classList.add('flatPrice');
+					document.getElementById('statChang3').classList.add('flatPrice');
+					}
+				else {
+					document.getElementById('statClose3').classList.add('fellPrice');
+					document.getElementById('statChang3').classList.add('fellPrice');	
+					}
+		   }		   
 		   document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
 		   document.getElementById('statClose3').textContent = itemPrice3 ;
-		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;				
+		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;
+		   document.getElementById('statHigh3').textContent = highPrice3 ;		   
+		   document.getElementById('statLow3').textContent = lowPrice3 ;		   
 		}
     }
 
@@ -752,6 +830,7 @@
 	graphcardRender();
     setInterval(async() => {
 	  let itemName1,incdecPrice1,itemPrice1,incdectxtPrice1,itemName2,incdecPrice2,itemPrice2,incdectxtPrice2,itemName3,incdecPrice3,itemPrice3,incdectxtPrice3 ;
+	  let highPrice1,lowPrice1,highPrice2,lowPrice2,highPrice3,lowPrice3;
 	  const marketClosetime = "13:30:00"; 
 	  const [h, m, s] = marketClosetime.split(':').map(Number);
 	  const timeToSeconds= h * 3600 + m * 60 + s ;
@@ -771,14 +850,32 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName1=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice1=quote_obj[n] ;
+			   if ( n == "12" ) highPrice1=quote_obj[n] ;
+			   if ( n == "13" ) lowPrice1=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice1=quote_obj[n] ;
 			}
 		   if ( incdecPrice1>0 ) 
 				incdectxtPrice1="+" + incdecPrice1.toString()
-		   else incdectxtPrice1= incdecPrice1 ;	
+		   else incdectxtPrice1= incdecPrice1 ;
+		   if ( incdecPrice1> 0) {
+					document.getElementById('statClose1').classList.add('risePrice');
+					document.getElementById('statChang1').classList.add('risePrice');
+				} 
+		   else {
+				if ( incdecPrice1 === 0){ 
+					document.getElementById('statClose1').classList.add('flatPrice');
+					document.getElementById('statChang1').classList.add('flatPrice');
+					}
+				else {
+					document.getElementById('statClose1').classList.add('fellPrice');
+					document.getElementById('statChang1').classList.add('fellPrice');	
+					}
+		   }		   
 		   document.getElementById('statName1').textContent = itemName1 ;
 		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
-		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;			
+		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;
+		   document.getElementById('statHigh1').textContent = highPrice1 ;		   
+		   document.getElementById('statLow1').textContent = lowPrice1 ;		   
 		}
 	  if (post2) {
 			const wi_o=post2.data.o;
@@ -788,14 +885,32 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName2=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice2=quote_obj[n] ;
+			   if ( n == "12" ) highPrice2=quote_obj[n] ;
+			   if ( n == "13" ) lowPrice2=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice2=quote_obj[n] ;
 			}
 		   if ( incdecPrice2>0 ) 
 				incdectxtPrice2="+" + incdecPrice2.toString()
 		   else incdectxtPrice2= incdecPrice2 ;
+		   if ( incdecPrice2> 0) {
+					document.getElementById('statClose2').classList.add('risePrice');
+					document.getElementById('statChang2').classList.add('risePrice');
+				} 
+		   else {
+				if ( incdecPrice2 === 0){ 
+					document.getElementById('statClose2').classList.add('flatPrice');
+					document.getElementById('statChang2').classList.add('flatPrice');
+					}
+				else {
+					document.getElementById('statClose2').classList.add('fellPrice');
+					document.getElementById('statChang2').classList.add('fellPrice');	
+					}
+		   }
 		   document.getElementById('statName2').textContent = itemName2 ;
 		   document.getElementById('statClose2').textContent = '$' + itemPrice2 ;
-		   document.getElementById('statChang2').textContent = incdectxtPrice2 ;				
+		   document.getElementById('statChang2').textContent = incdectxtPrice2 ;
+		   document.getElementById('statHigh2').textContent = highPrice2 ;		   
+		   document.getElementById('statLow2').textContent = lowPrice2 ;		   
 		}
 	  if (post3) {
 			const wi_o=post3.data.o;
@@ -805,17 +920,35 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName3=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice3=quote_obj[n] ;
+			   if ( n == "12" ) highPrice3=quote_obj[n] ;
+			   if ( n == "13" ) lowPrice3=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice3=quote_obj[n] ;
 			}
 		   if ( incdecPrice3>0 ) 
 				incdectxtPrice3="+" + incdecPrice3.toString()
 		   else incdectxtPrice3= incdecPrice3 ;
+		   if ( incdecPrice3> 0) {
+					document.getElementById('statClose3').classList.add('risePrice');
+					document.getElementById('statChang3').classList.add('risePrice');
+				} 
+		   else {
+				if ( incdecPrice3 === 0){ 
+					document.getElementById('statClose3').classList.add('flatPrice');
+					document.getElementById('statChang3').classList.add('flatPrice');
+					}
+				else {
+					document.getElementById('statClose3').classList.add('fellPrice');
+					document.getElementById('statChang3').classList.add('fellPrice');	
+					}
+		   }		   
 		   document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
 		   document.getElementById('statClose3').textContent = itemPrice3 ;
-		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;				
+		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;
+		   document.getElementById('statHigh3').textContent = highPrice3 ;		   
+		   document.getElementById('statLow3').textContent = lowPrice3 ;		   
 		}
 		
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && ( Math.abs(incdecPrice1)>0.5 || Math.abs(incdecPrice2)>0.5) ){
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && ( Math.abs(incdecPrice1)>0.3 || Math.abs(incdecPrice2)>0.3) ){
         const h = now.getHours();
 		triggerChime(h);
 		/*
