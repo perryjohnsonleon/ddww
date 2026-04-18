@@ -179,7 +179,7 @@
   /* ── STATS GRID ─────────────────────────────── */
 	 .stats-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(1, 1fr);
 		gap: 2px;
 		margin-bottom: 2px;
 	 }
@@ -199,7 +199,7 @@
     .stat-card:hover { border-color: rgba(255,255,255,0.12); }
 	.stat-label {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.9rem;
+		font-size: 1.2rem;
 		font-weight: 400;
 		color: var(--label);
 		transition: color 0.4s;
@@ -218,6 +218,17 @@
 	  }
 
 	.stat-value {
+		font-family: 'Syne', sans-serif;
+		font-size: 1.2rem;
+		font-weight: 600;
+		color: #fff;
+		transition: color 0.4s;
+		padding:0 4px;
+		display:flex;
+		align-items:flex-end;
+	  }
+	  
+	  .stat-value2 {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.7rem;
 		font-weight: 600;
@@ -482,10 +493,10 @@
 		</div>
 		<div class="stat-card">
 		  <div class="wi-label label-text" id="statName3">—</div>
-		  <div class="stat-value" id="statClose3">—</div>
+		  <div class="stat-value2" id="statClose3">—</div>
 		  <div class="stat-value" id="statChang3">—</div>
-		  <div class="stat-value tips-text" id="statHigh3">—</div>
-		  <div class="stat-value tips-text" id="statLow3">—</div>				  
+		  <div class="stat-value2 tips-text" id="statHigh3">—</div>
+		  <div class="stat-value2 tips-text" id="statLow3">—</div>				  
 		</div>
   </div>
   <button class="chime-btn" id="chimeBtn" title="Toggle hourly chime">
@@ -941,7 +952,8 @@
 					document.getElementById('statChang3').classList.add('fellPrice');	
 					}
 		   }		   
-		   document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
+		// document.getElementById('statName3').textContent = itemName3.slice(4, 8) ;
+		   document.getElementById('statName3').textContent = "大盤" ;
 		   document.getElementById('statClose3').textContent = itemPrice3 ;
 		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;
 		   document.getElementById('statHigh3').textContent = highPrice3 ;		   
