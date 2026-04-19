@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>▲▲▲▲熱股大盤聲音報價</title>
+  <title>▲▲ 熱股大盤聲音報價</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -189,8 +189,8 @@
 		vertical-align: auto;
 		background: var(--surface);
 		border: 1px solid var(--border);
-		border-radius: 12px;
-		padding: 8px 10px;
+		border-radius: 2px;
+		padding: 2px 2px;
 		position: relative;
 		overflow: hidden;
 		transition: border-color 0.3s;
@@ -1118,9 +1118,9 @@
 		   document.getElementById('statLow5').textContent = lowPrice3 ;		   
 		}
 		
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && ( Math.abs(incdecPrice1)>0.3 || Math.abs(incdecPrice2)>0.3) ){
-        const h = now.getHours();
-		triggerChime(h);
+      if ( Math.abs(incdecPrice1)>0.5 || Math.abs(incdecPrice2)>0.5 ){
+        // const h = now.getHours();
+		triggerChime(11);
 		/*
         if (h !== lastChimeHour) {
           lastChimeHour = h;
