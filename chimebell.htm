@@ -815,7 +815,8 @@
 		   document.getElementById('statChang3').textContent = incdectxtPrice3 ;				
 		}
 		
-      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && ( Math.abs(incdecPrice1)>0.5 || Math.abs(incdecPrice2)>0.5) ){
+      if ( now.getMinutes() > 0 && now.getSeconds() != 0 && ( Math.abs(incdecPrice1)>0.1 || Math.abs(incdecPrice2)>0.1) ){
+	  console.log('got!');
         const h = now.getHours();
 		triggerChime(h);
 		/*
@@ -825,7 +826,7 @@
         }
 		*/
       }
-    }, 100000);
+    }, 3000);
 
     // Mute toggle button
     document.getElementById('chimeBtn').addEventListener('click', () => {

@@ -1054,7 +1054,7 @@
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName4=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice4=quote_obj[n] ;
-			   if ( n == "12" ) highPrice4quote_obj[n] ;
+			   if ( n == "12" ) highPrice4=quote_obj[n] ;
 			   if ( n == "13" ) lowPrice4=quote_obj[n] ;
 			   if ( n == "6" ) itemPrice4=quote_obj[n] ;
 			}
@@ -1117,8 +1117,8 @@
 		   document.getElementById('statHigh5').textContent = highPrice3 ;		   
 		   document.getElementById('statLow5').textContent = lowPrice3 ;		   
 		}
-		
-      if ( Math.abs(incdecPrice1)>0.5 || Math.abs(incdecPrice2)>0.5 ){
+      if ( Math.abs(incdecPrice1)>0.4 || Math.abs(incdecPrice2)>0.4){
+	    console.log('got it!');
         // const h = now.getHours();
 		triggerChime(11);
 		/*
