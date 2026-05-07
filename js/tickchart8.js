@@ -1,11 +1,11 @@
 // ── DATA ───────────────────────────────────────────────────────────────────
- const stockId_list=['2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00980A','00981A','00982A','00992A','0050'];
+ const stockId_list=['8888','2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00980A','00981A','00982A','00992A','0050'];
 	
 // ── STATE ──────────────────────────────────────────────────────────────────
- const MAIN = { sym: '宏碁(一)', name: '2353', price: 27 };
+ const MAIN = { sym: '大盤指數', name: '2353', price: 27 };
  const MARKETS = [{ sym: '大盤指數',  name: 'NASDAQ 100', sub: 'US Index', price: 32722 }];
  const state = {
-  main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 },
+  main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 , flat:0},
   markets: MARKETS.map(m => ({ ...m, change: 0, spark: [] })),
   history: [],
  };
@@ -14,7 +14,7 @@
  const mask_button = document.getElementById("collapseBtn2") ;
  let running=false,sw_no=1,firstVisit = true ;     // original value:  true 
  let refSec = 3000 ; // original value:  0
- let symId=1,count=0 ,stockId=0 , btn2_expandId= ""  ;
+ let symId=0,count=0 ,stockId=0 , btn2_expandId= ""  ;
  let width = 0 , intervalIds = [] , itemPrice_matrix=[] , itemPrice_arry = [] , itemYear_arry11 = [] , itemYear_arry12 = [] , itemYear_arry13 = [] , itemYear_arry21 = [] , itemYear_arry22 = [] , itemYear_arry23 = [] ;
  let show_YearRpt="" , show_SeasonRpt="" , show_MonthRpt="" , tr_line="" ; 
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt1,midline_txt2,title_txt,item_price1,item_price2,mid_price1=0,mid_price2=0,min_price=0,max_price=0,incdecPrice1,incdecPrice2,timeLabel,labels=[],dataPoints1=[],dataPoints2=[],title1="圖例1",title2="圖例2",point_no=0;
@@ -406,18 +406,21 @@
   // let labels = [] , dataPoints1 = [] , dataPoints2 = [] ;
   async function getData(symId) {
 	  	let fetchUrl_str="" ;
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1"   ;
-		if (symId == 9999 ) 
+		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
+		if (symId == 9999) {
 			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
-		else
-			fetchUrl_str=fetchUrl_str1 + stockId_list[symId-1] + fetchUrl_str2 ;
+		} else if (symId == 0) {
+			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:TSE01:INDEX&quote=1"
+		} else {
+			fetchUrl_str=fetchUrl_str1 + stockId_list[symId] + fetchUrl_str2
+		}
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
 		   throw new Error(`HTTP error!!!! status: ${response.status}`);
 		  }
 	    else {
 		  const result = await response.json();
-		  return result; // ← 正確把值傳出去 
+		  return result; 
 	    }
 	 }
 	 
@@ -841,7 +844,8 @@
 
   // Open price midline
   const openPrice = state.main.open;
-  const clampedOpen = Math.min(Math.max(openPrice, min), max);
+  const flatPrice = state.main.flat;
+  const clampedOpen = Math.min(Math.max(flatPrice, min), max);
   const openY = pad.top + (max - clampedOpen) * yScale;
   ctx.beginPath();
   ctx.setLineDash([4, 6]);
@@ -855,7 +859,7 @@
   ctx.font = '9px DM Mono';
   ctx.fillStyle = 'rgba(180,190,220,0.45)';
   ctx.textAlign = 'left';
-  ctx.fillText('開盤  $' + openPrice.toFixed(2), pad.left + 4, openY - 4);
+  ctx.fillText('平盤  $' + flatPrice.toFixed(2), pad.left + 4, openY - 4);
 
   // Price labels y-axis
   ctx.font = '10px DM Mono';
@@ -882,7 +886,7 @@ function drawSpark(svgEl, data, isGain) {
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
  async function renderMain(symId) {
-	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
+	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,midPrice;
 	  const post = await getData(symId);
 	  if (post) {		  
 			const wi_o=post.data.o;
@@ -905,13 +909,13 @@ function drawSpark(svgEl, data, isGain) {
 			}
 		   if ( incdecPrice>0 ) 
 				incdectxtPrice="+" + incdecPrice.toString()
-		   else incdectxtPrice= incdecPrice ;	
-		   m.price=itemPrice ;
+		   else incdectxtPrice= incdecPrice ;
+		   midPrice=itemPrice-incdecPrice;		   
 		   m.open=wi_oo[0] ;
 		   m.high=highPrice ;
 		   m.low=lowPrice ;
 		   m.change=incdecPrice ;
-		   //  ****
+		   m.flat=midPrice ;
 		   priceEl.textContent = '$' + m.price;
 		   priceEl.classList.remove('price-tick');
 		   void priceEl.offsetWidth;
@@ -951,7 +955,7 @@ function drawSpark(svgEl, data, isGain) {
 }
 
  async function graphcardRender(symId) {
-	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
+	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,flatPrice,midPrice;
 	  const post = await getData(symId);
 	  if (post) {		  
 			const wi_o=post.data.o;
@@ -976,8 +980,8 @@ function drawSpark(svgEl, data, isGain) {
 			}
 		   if ( incdecPrice>0 ) 
 				incdectxtPrice="+" + incdecPrice.toString()
-		   else incdectxtPrice= incdecPrice ;	
-		   // console.log(itemName1,incdecPrice1,highPrice1,lowPrice1,itemPrice1,wi_oo[0]);
+		   else incdectxtPrice= incdecPrice ;
+		   midPrice=itemPrice-incdecPrice;	
 		   m.sys=itemName;
 		   m.price=itemPrice ;
 		   m.open=wi_oo[0] ;
@@ -985,7 +989,7 @@ function drawSpark(svgEl, data, isGain) {
 		   m.high=highPrice ;
 		   m.low=lowPrice ;
 		   m.change=incdecPrice ;
-		   //  ****
+		   m.flat=midPrice;
 		   symName.textContent = m.sys ;
 		   priceEl.textContent = '$' + m.price;
 		   priceEl.classList.remove('price-tick');
@@ -999,16 +1003,8 @@ function drawSpark(svgEl, data, isGain) {
 		   document.getElementById('statOpen').textContent = '$' + m.open;
 		   document.getElementById('statHigh').textContent = '$' + m.high;
 		   document.getElementById('statLow').textContent = '$' + m.low;
-		   //	****  		   
-		   /*
-		   document.getElementById('statName1').textContent = itemName1 ;
-		   document.getElementById('statClose1').textContent = '$' + itemPrice1 ;
-		   document.getElementById('statChang1').textContent = incdectxtPrice1 ;
-		   document.getElementById('statHigh1').textContent = highPrice1 ;		   
-		   document.getElementById('statLow1').textContent = lowPrice1 ;
-		   */
 		}
- }
+  }
 
  async function renderMarkets(symId) {
   let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
@@ -1044,8 +1040,6 @@ function drawSpark(svgEl, data, isGain) {
   }	 
 	const list = document.getElementById('marketList');
 	list.innerHTML = '';
-	// console.log("aa",m.change);
-	// console.log("bb",m);
 	const isGain = m.change >= 0;
 	const row = document.createElement('div');
 	row.className = 'market-row';
@@ -1075,7 +1069,7 @@ function drawSpark(svgEl, data, isGain) {
  }
 
 // ── UPDATE ─────────────────────────────────────────────────────────────────
-function tick() {
+function tick(symId) {
   // Main stock update
   const volatility = 0.0012;
   const drift = (Math.random() - 0.499) * volatility;
@@ -1096,8 +1090,8 @@ function tick() {
     if (m.spark.length > 20) m.spark.shift();
 
     const isGain = m.change >= 0;
-    const priceEl = document.getElementById('mprice-' + idx);
-    const changeEl = document.getElementById('mchange-' + idx);
+    const priceEl = document.getElementById('mprice-0');
+    const changeEl = document.getElementById('mchange-0');
     const rowEl = document.getElementById('mrow-' + idx);
 
     if (priceEl) {
@@ -1189,7 +1183,7 @@ state.markets.forEach(m => {
 		  if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
 		}
 	  });
-	},100000);
+	},3000);
     intervalIds.push(id); 
 	
 
