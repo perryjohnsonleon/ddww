@@ -9,19 +9,6 @@
 <!-- Chart.js -->
 </head>
 <body>
-    <div class="view">
-        <div class="view-items">
-        <div id="hiddenMsg1">
-              <div style="display:flex">			  
-                  <div id="hiddenElement1">
-                  </div>
-                  <div id="hiddenElement2">
-                  </div>
-                  <div id="collapseBtn"><img src="collapse.png" style="display:none;cursor:pointer;" onclick="collapseElement()" />
-                  </div>
-              </div>
-        </div>
-		<div id="hiddenMsg2" style="display:block">
 			<!-- 外部程式 begin -->
 			<div class="wrapper">
 			  <!-- Ticker Header -->
@@ -37,23 +24,27 @@
 				  </div>
 				  <div>
 					<select id="s01">
-							<option value="1">台積電</option>
-							<option value="2">聯發科</option>
-							<option value="3">台達電</option>
-							<option value="4" selected>鴻海</option>
-							<option value="5">聯電</option>
-							<option value="6">華邦電</option>
-							<option value="7">南亞科</option>
-							<option value="8">力積電</option>
-							<option value="9">旺宏</option>
-							<option value="10">台勝科</option>
-							<option value="11">英業達</option>
-							<option value="12">華碩</option>
-							<option value="13">00980A</option>
-							<option value="14">00981A</option>
-							<option value="15">00982A</option>
-							<option value="16">00992A</option>
-							<option value="17">0050</option>
+							<option value="0" selected>大盤K線</option>					
+							<option value="1">宏碁</option>
+							<option value="2">英業達</option>
+							<option value="3">華碩</option>
+							<option value="4">仁寶</option>
+							<option value="5">台積電</option>
+							<option value="6">聯發科</option>
+							<option value="7">台達電</option>
+							<option value="8">鴻海</option>
+							<option value="9">聯電</option>
+							<option value="10">華邦電</option>
+							<option value="11">南亞科</option>
+							<option value="12">力積電</option>
+							<option value="13">旺宏</option>
+							<option value="14">台勝科</option>
+							<option value="15">亞泥</option>							
+							<option value="16">00980A</option>
+							<option value="17">00981A</option>
+							<option value="18">00982A</option>
+							<option value="19">00992A</option>
+							<option value="20">0050</option>
 							<option value="9999">停止</option>
 					</select>				  
 				  </div>
@@ -85,203 +76,7 @@
 			  <div class="market-list" id="marketList"></div>
 			</div>			
 			<!-- 外部程式 end -->
-			<div id="collapseBtns" style="display:flex">
-			<div id="collapseBtn2" style="display:none;justify-content:center;"><img src='collapse.png' style='cursor:pointer;' onclick='collapseElement2()' /></div>
-			<div id="oneBtn" style="display:none;justify-content:center;"><img src='onebtn.png' style='cursor:pointer;' /></div>
-			<div id="twinBtn" style="display:none;justify-content:center;"><img src='twinbtn.png' style='cursor:pointer;' /></div>			
-			<div id="stopBtn" style="display:none;justify-content:center;"><img src='stopbtn.png' style='cursor:pointer;' onclick='collapseElement3()' /></div>
-			<div id="goBtn" style="display:none;justify-content:center;"><img src='gobtn.png' style='cursor:pointer;' onclick='collapseElement3()' /></div>
-			</div>
-		</div>
-          <div style="display:block;"> 
-              <div style="display:flex;">
-                  <div id="item-11" class="item2"></div>
-                  <div id="item-21" class="item3"></div>
-                  <div id="item-31" class="item3"></div>
-                  <div id="item-41" class="item3"></div>
-                  <div id="item-51" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-12" class="item2"></div>
-                  <div id="item-22" class="item3"></div>
-                  <div id="item-32" class="item3"></div>
-                  <div id="item-42" class="item3"></div>
-                  <div id="item-52" class="item3"></div>
-              </div>  			  
-              <div style="display:flex;">
-                  <div id="item-13" class="item2"></div>
-                  <div id="item-23" class="item3"></div>
-                  <div id="item-33" class="item3"></div>
-                  <div id="item-43" class="item3"></div>
-                  <div id="item-53" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-14" class="item2"></div>
-                  <div id="item-24" class="item3"></div>
-                  <div id="item-34" class="item3"></div>
-                  <div id="item-44" class="item3"></div>
-                  <div id="item-54" class="item3"></div>
-              </div>  
-         </div>
-          <div style="display:block;"> 
-              <div style="display:flex;">
-                  <div id="item-15" class="item2"></div>
-                  <div id="item-25" class="item3"></div>
-                  <div id="item-35" class="item3"></div>
-                  <div id="item-45" class="item3"></div>
-                  <div id="item-55" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-16" class="item2"></div>
-                  <div id="item-26" class="item3"></div>
-                  <div id="item-36" class="item3"></div>
-                  <div id="item-46" class="item3"></div>
-                  <div id="item-56" class="item3"></div>
-              </div>  			  
-              <div style="display:flex;">
-                  <div id="item-17" class="item2"></div>
-                  <div id="item-27" class="item3"></div>
-                  <div id="item-37" class="item3"></div>
-                  <div id="item-47" class="item3"></div>
-                  <div id="item-57" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-18" class="item2"></div>
-                  <div id="item-28" class="item3"></div>
-                  <div id="item-38" class="item3"></div>
-                  <div id="item-48" class="item3"></div>
-                  <div id="item-58" class="item3"></div>
-              </div>  
-         </div>
-          <div style="display:block;"> 
-              <div style="display:flex;">
-                  <div id="item-19" class="item2"></div>
-                  <div id="item-29" class="item3"></div>
-                  <div id="item-39" class="item3"></div>
-                  <div id="item-49" class="item3"></div>
-                  <div id="item-59" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-110" class="item2"></div>
-                  <div id="item-210" class="item3"></div>
-                  <div id="item-310" class="item3"></div>
-                  <div id="item-410" class="item3"></div>
-                  <div id="item-510" class="item3"></div>
-              </div>  			  
-              <div style="display:flex;">
-                  <div id="item-111" class="item2"></div>
-                  <div id="item-211" class="item3"></div>
-                  <div id="item-311" class="item3"></div>
-                  <div id="item-411" class="item3"></div>
-                  <div id="item-511" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-112" class="item2"></div>
-                  <div id="item-212" class="item3"></div>
-                  <div id="item-312" class="item3"></div>
-                  <div id="item-412" class="item3"></div>
-                  <div id="item-512" class="item3"></div>
-              </div>  
-         </div>
-          <div style="display:block;"> 
-              <div style="display:flex;">
-                  <div id="item-113" class="item2"></div>
-                  <div id="item-213" class="item3"></div>
-                  <div id="item-313" class="item3"></div>
-                  <div id="item-413" class="item3"></div>
-                  <div id="item-513" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-114" class="item2"></div>
-                  <div id="item-214" class="item3"></div>
-                  <div id="item-314" class="item3"></div>
-                  <div id="item-414" class="item3"></div>
-                  <div id="item-514" class="item3"></div>
-              </div>  			  
-              <div style="display:flex;">
-                  <div id="item-115" class="item2"></div>
-                  <div id="item-215" class="item3"></div>
-                  <div id="item-315" class="item3"></div>
-                  <div id="item-415" class="item3"></div>
-                  <div id="item-515" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-116" class="item2"></div>
-                  <div id="item-216" class="item3"></div>
-                  <div id="item-316" class="item3"></div>
-                  <div id="item-416" class="item3"></div>
-                  <div id="item-516" class="item3"></div>
-              </div>  
-         </div>
-          <div style="display:block;"> 
-              <div style="display:flex;">
-                  <div id="item-117" class="item2"></div>
-                  <div id="item-217" class="item3"></div>
-                  <div id="item-317" class="item3"></div>
-                  <div id="item-417" class="item3"></div>
-                  <div id="item-517" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-118" class="item2"></div>
-                  <div id="item-218" class="item3"></div>
-                  <div id="item-318" class="item3"></div>
-                  <div id="item-418" class="item3"></div>
-                  <div id="item-518" class="item3"></div>
-              </div>  			  
-              <div style="display:flex;">
-                  <div id="item-119" class="item2"></div>
-                  <div id="item-219" class="item3"></div>
-                  <div id="item-319" class="item3"></div>
-                  <div id="item-419" class="item3"></div>
-                  <div id="item-519" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-120" class="item2"></div>
-                  <div id="item-220" class="item3"></div>
-                  <div id="item-320" class="item3"></div>
-                  <div id="item-420" class="item3"></div>
-                  <div id="item-520" class="item3"></div>
-              </div>  
-         </div>
-          <div style="display:block;"> 
-              <div style="display:flex;">
-                  <div id="item-121" class="item2"></div>
-                  <div id="item-221" class="item3"></div>
-                  <div id="item-321" class="item3"></div>
-                  <div id="item-421" class="item3"></div>
-                  <div id="item-521" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-122" class="item2"></div>
-                  <div id="item-222" class="item3"></div>
-                  <div id="item-322" class="item3"></div>
-                  <div id="item-422" class="item3"></div>
-                  <div id="item-522" class="item3"></div>
-              </div>  			  
-              <div style="display:flex;">
-                  <div id="item-123" class="item2"></div>
-                  <div id="item-223" class="item3"></div>
-                  <div id="item-323" class="item3"></div>
-                  <div id="item-423" class="item3"></div>
-                  <div id="item-523" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-124" class="item2"></div>
-                  <div id="item-224" class="item3"></div>
-                  <div id="item-324" class="item3"></div>
-                  <div id="item-424" class="item3"></div>
-                  <div id="item-524" class="item3"></div>
-              </div>
-			  <div style="display:flex;">
-                  <div id="item-125" class="item2"></div>
-                  <div id="item-225" class="item3"></div>
-                  <div id="item-325" class="item3"></div>
-                  <div id="item-425" class="item3"></div>
-                  <div id="item-525" class="item3"></div>
-              </div>  			  
-         </div>		  
-         </div>
-      </div>
+
 <script src="js/tickchart.js"></script>
 </body>
 </html>
