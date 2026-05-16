@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rotating Ball</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f4ef;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2.5rem 2rem;
+    }
+
+    #toggleBtn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 22px;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: #fff;
+      color: #1a1a1a;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.1s;
+    }
+    #toggleBtn:hover  { background: #f0efea; }
+    #toggleBtn:active { transform: scale(0.97); }
+
+    .status {
+      font-size: 13px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .sdot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #1D9E75;
+      transition: background 0.3s;
+    }
+    .sdot.off { background: #888; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <canvas id="ball" width="30" height="30"></canvas>
+  <button id="toggleBtn" onclick="toggle()">
+    <i class="ti ti-player-pause" id="icon" style="font-size:16px"></i>
+    <span id="label">Stop rotation</span>
+  </button>
+</div>
+
+<script>
+  const canvas = document.getElementById('ball');
+  const ctx    = canvas.getContext('2d');
+  const S = 30, cx = S / 2, cy = S / 2, R = 12;
+
+  let spinning = true;
+  let angle    = 0;
+
+  /* stripe colours */
+  const colors  = ['#378ADD', '#1D9E75', '#E24B4A', '#EF9F27', '#7F77DD'];
+  const stripeW = 22;
+  const totalW  = stripeW * colors.length;
+
+  function draw(a) {
+    ctx.clearRect(0, 0, S, S);
+
+    /* clip all drawing to the circle */
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.clip();
+
+    /* scrolling colour stripes */
+    const shift = (a % 360) / 360 * totalW;
+    const count = colors.length;
+    for (let i = -1; i <= Math.ceil(S / stripeW) + 2; i++) {
+      const x = i * stripeW - shift;
+      ctx.fillStyle = colors[((i % count) + count) % count];
+      ctx.fillRect(x, 0, stripeW, S);
+    }
+
+    /* highlight — upper-left gloss */
+    ctx.fillStyle = 'rgba(255,255,255,0.13)';
+    ctx.beginPath();
+    ctx.ellipse(cx - 16, cy - 16, 20, 30, -Math.PI / 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    /* shadow — right-side shading */
+    ctx.fillStyle = 'rgba(0,0,0,0.22)';
+    ctx.beginPath();
+    ctx.arc(cx + 14, cy, R, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+
+    /* outer rim */
+    ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+    ctx.lineWidth   = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  /* animation loop */
+  function loop() {
+    if (spinning) angle += 1.4;
+    draw(angle);
+    requestAnimationFrame(loop);
+  }
+
+  /* button handler */
+  function toggle() {
+    spinning = !spinning;
+    document.getElementById('icon').className   = spinning ? 'ti ti-player-pause' : 'ti ti-player-play';
+    document.getElementById('label').textContent = spinning ? 'Stop'      : 'Resume';
+    // document.getElementById('stxt').textContent  = spinning ? 'Rotating'           : 'Stopped';
+  }
+
+  loop();
+</script>
+</body>
+</html>
