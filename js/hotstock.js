@@ -247,7 +247,7 @@
 	  }
   } 
 
- async function displayPost(stockId) {
+ async function displayPost(stockId,itemId) {
 	  const post = await getPost(stockId);
 	  let elemId_price = "" , elemId_price_flag = 0;
 	  if (stockId == 9999) {
@@ -276,7 +276,7 @@
 			}	
 	  }
 	  else {
-			const num = stockId+1 ;
+			const num = itemId+1 ;
 			let elemId_1="item-1" + num , elemId_2="item-2" + num , elemId_3="item-3" + num , elemId_4="item-4" + num , elemId_5="item-5" + num ;
 			btn2_expandId = "btn2-expandId" + num ; 
 			if (post) {
@@ -768,5 +768,20 @@
     }
 	  
   async function startShow(sel_No) {
-		STOCKS.map((m,idx1)=>m.map((m1,idx2)=>{ if (idx1==sel_No) await displayPost(m1);})) ;
+    stockId_list=STOCKS[sel_No];
+	await displayPost(9999);
+	for (let i=0;i<stockId_list.length;i++) {
+		await displayPost(stockId_list[i],i);
+	}
+	/*
+    const result = numbers.map((value, index) => {
+    return `${value}`};
+    });
+	const numbers = list9;
+    const result = numbers.map((value, index) => {
+    return `${value}`;
+    });
+    console.log(result);
+		await displayPost(result,sel_No);
+	*/	
 	}   
