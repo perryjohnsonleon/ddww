@@ -3,19 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CLOCK</title>
+  <title>鬧鐘時間設定</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
+	 :root {
       --bg: #060810;
       --panel: #0c1020;
       --glow: #00f0ff;
       --glow2: #ff2d78;
       --dim: #0a2a30;
       --text: #e0faff;
-      --tick: #1a3a45;
+      --tick: #1a3a45;	  
+	  --surface: #0d1117;
+	  --border: rgba(255,255,255,0.06);
+	  --muted: #4a5068;
+	  --label: #e0faff;
+	  --wilabel: #4a5068;	  
+	  --gain: #ff1744;
+	  --loss: #00e676;
+	  --gain-dim: rgba(255,23,68,0.08);
+	  --loss-dim: rgba(0,230,118,0.08);
+	  --accent: #5c7cfa;
+	  --accent-dim: rgba(92,124,250,0.12);
+	  --grid: rgba(255,255,255,0.025);
     }
 
     body {
@@ -85,11 +97,43 @@
     .label {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 13px;
+	  font-weight: bold;
       letter-spacing: 8px;
       color: var(--glow);
       opacity: 0.6;
       text-transform: uppercase;
     }
+
+	.custom-btn {
+	 font-size: 22px;            
+	 background-color: #3498db;
+	 color: #000;
+	 padding: 2px;
+	 border: 1px solid #ccc;
+	 border-radius: 5px;
+	 cursor: pointer;
+	  }
+  
+    select {
+     background-color: #B8D7D9;
+	 font-size: 22px;
+	 font-weight: 800;
+	 padding: 2px;
+	 border: 1px solid #ccc;
+	 border-radius: 4px;
+	}
+	
+    .custom-select1 {
+	 color: #8A23DB;
+	}
+	
+	.custom-select2 {
+	 color: #483FF1;
+	}
+	
+	.custom-select3 {
+	 color: #333;
+	}
 
     /* Analog clock */
     .analog-wrap {
@@ -112,16 +156,16 @@
                   var(--panel);
     }
 	
-	#toggleBtn {
+    #toggleBtn {	
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 3px 7px;
-      font-size: 10px;
-      font-weight: 200;
+      gap: 2px;
+      padding: 4px;
+      font-size: 20px;
+      font-weight: bold;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      background: #fff;
+      border-radius: 12px;
+      background: #E8D7AC;
       color: #1a1a1a;
       cursor: pointer;
       font-family: inherit;
@@ -129,6 +173,69 @@
     }
     #toggleBtn:hover  { background: #f0efea; }
     #toggleBtn:active { transform: scale(0.97); }
+	
+	  /* ── STATS GRID ─────────────────────────────── */
+	 .stats-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 3px;
+		margin-bottom: 4px;
+	 }
+
+	 .stat-card {
+	 	display:flex;
+		vertical-align: auto;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 8px 10px;
+		position: relative;
+		overflow: hidden;
+		transition: border-color 0.3s;
+	 }
+
+    .stat-card:hover { border-color: rgba(255,255,255,0.12); }
+	.stat-label {
+		font-family: 'Syne', sans-serif;
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: var(--label);
+		transition: color 0.4s;
+		display:flex;
+		align-items:flex-end;
+	  }
+	  
+	  .wi-label {
+		font-family: 'Syne', sans-serif;
+		font-size: 0.6rem;
+		font-weight: 600;
+		color: var(--wilabel);
+		transition: color 0.4s;
+		display:flex;
+		align-items:center;
+	  }
+
+	.stat-value {
+		font-family: 'Syne', sans-serif;
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: #fff;
+		transition: color 0.4s;
+		display:flex;
+		align-items:flex-end;
+	  }
+
+	.stat-sub {
+		font-size: 0.64rem;
+		color: var(--muted);
+		margin-top: 4px;
+	  }
+
+	.label-text { color: var(--label); }
+	.loss-text { color: var(--loss); }
+	.gain-text { color: var(--gain); }
+	.loss-text { color: var(--loss); }
+	.change-text { color: var(--loss); }	
 
     /* Tick marks */
     .ticks {
@@ -337,7 +444,9 @@
       color: rgba(0,240,255,0.3);
       border-color: rgba(0,240,255,0.08);
     }
-    .chime-btn .icon { font-size: 24px; }
+    .chime-btn .icon {
+	 font-size: 24px;    
+	}
 
     /* Chime toast notification */
     .chime-toast {
@@ -391,58 +500,81 @@
   <div class="chime-toast" id="chimeToast">⬡ On the Hour</div>
 
   <!-- Mute toggle -->
-<div class="s-item">
-	<select id="s01">
-		<option value="8">8</option>
-		<option value="9">9</option>
-		<option value="10">10</option>
-		<option value="11">11</option>
-		<option value="12">12</option>
-		<option value="13">13</option>
-		<option value="17" selected>17</option>
-		<option value="18">18</option>
-		<option value="19">19</option>
-		<option value="20">20</option>
-		<option value="21">21</option>
-		<option value="22">22</option>
-	</select>
-		<select id="s02">
-		<option value="10">10</option>
-		<option value="20">20</option>
-		<option value="30">30</option>
-		<option value="35">35</option>
-		<option value="40">40</option>
-		<option value="45">45</option>
-		<option value="50">50</option>
-		<option value="51">51</option>
-		<option value="52">52</option>
-		<option value="53">53</option>
-		<option value="54">54</option>
-		<option value="55">55</option>
-		<option value="56">56</option>
-		<option value="57">57</option>
-		<option value="58">58</option>
-		<option value="59" selected>59</option>
-	</select>
-		<select id="s03">
-		<option value="00" selected>0</option>
-		<option value="05">5</option>
-		<option value="10">10</option>
-		<option value="15">15</option>
-		<option value="20">20</option>
-		<option value="25">25</option>
-		<option value="30">30</option>
-		<option value="35">35</option>
-		<option value="40">40</option>
-		<option value="45">45</option>
-		<option value="50">50</option>
-		<option value="55">55</option>
-	</select>
-</div>
-	<button id="toggleBtn">
-    <i class="ti ti-player-pause" id="icon" style="font-size:10px"></i>
-    <!-- span id="label">Stop rotation</span -->
-	</button>
+   <div class="stats-grid">
+		<div class="stat-card">
+			<div class="stat-label label-text">
+				<select id="s01" class="custom-select1">
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13" selected>13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>				
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+					<option value="22">22</option>
+					<option value="23">23</option>		
+				</select>
+			</div>
+			<div class="stat-label label-text">時</div>
+		</div>
+		<div class="stat-card">
+			<div class="stat-label label-text"">
+				<select id="s02" class="custom-select2">
+					<option value="00">0</option>
+					<option value="10">10</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+					<option value="35">35</option>
+					<option value="40">40</option>
+					<option value="45">45</option>
+					<option value="50">50</option>
+					<option value="51">51</option>
+					<option value="52">52</option>
+					<option value="53">53</option>
+					<option value="54">54</option>
+					<option value="55">55</option>
+					<option value="56">56</option>
+					<option value="57">57</option>
+					<option value="58">58</option>
+					<option value="59" selected>59</option>
+				</select>
+			</div>
+			<div class="stat-label label-text">分</div>
+		</div>
+		<div class="stat-card">
+			<div class="stat-label label-text">
+				<select id="s03" class="custom-select3">
+					<option value="00" selected>0</option>
+					<option value="05">5</option>
+					<option value="10">10</option>
+					<option value="15">15</option>
+					<option value="20">20</option>
+					<option value="25">25</option>
+					<option value="30">30</option>
+					<option value="35">35</option>
+					<option value="40">40</option>
+					<option value="45">45</option>
+					<option value="50">50</option>
+					<option value="55">55</option>
+				</select>
+			</div>
+			<div class="stat-label label-text">秒</div>
+		</div>
+		<div class="stat-card">
+			<button class="custom-btn" id="toggleBtn">
+				<i class="ti ti-player-pause" id="icon" style="font-size:10px"></i>
+				<span id="label">啟動鬧鈴設定</span>
+			</button>	  
+		</div>
+  </div>
+
   <button class="chime-btn" id="chimeBtn" title="Toggle hourly chime">
     <span class="icon" id="chimeIcon">🔔</span>
     <span id="chimeLbl">CHIME ON</span>
@@ -688,6 +820,7 @@
       const s2 = document.getElementById('s02').value;
       const s3  = document.getElementById('s03').value;
       STARTtime=s1+":"+s2+ ":" +s3
+	  console.log(111,STARTtime);	
     });
 	
     document.getElementById('chimeBtn').addEventListener('click', () => {
