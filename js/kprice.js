@@ -433,7 +433,7 @@ state.markets.forEach(m => {
 	await renderMain(symId);
 	await renderMarkets(symId);
 	  id=setInterval(async() => {
-			const marketClosetime =  ; 
+			const marketClosetime = "16:30:00"; 
 			const [h, m, s] = marketClosetime.split(':').map(Number);
 			const timeToSeconds= h * 3600 + m * 60 + s ;
 			const now = new Date();
