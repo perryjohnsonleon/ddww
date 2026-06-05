@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />	
+<title>個股vs.大盤分時走勢圖</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="css/tickchart.css" rel="stylesheet" />
+<!-- Chart.js -->
+</head>
+<body>
+			<!-- 外部程式 begin -->
+			<div class="wrapper">
+			  <!-- Ticker Header -->
+			  <div class="ticker-header">
+				<div class="ticker-left">
+				  <div class="ticker-symbol" id="sym"></div>
+				  <div class="ticker-price-row">
+					<div class="current-price" id="mainPrice">—</div>
+					<div class="price-change gain" id="priceChange">
+					  <span class="change-val" id="changeVal">—</span>
+					  <span class="change-pct" id="changePct">—</span>
+					</div>
+				  </div>
+				  <div>
+					<select id="s01">
+							<option value="0" selected>大盤K線</option>					
+							<option value="1">宏碁</option>
+							<option value="2">英業達</option>
+							<option value="3">華碩</option>
+							<option value="4">仁寶</option>
+							<option value="5">台積電</option>
+							<option value="6">聯發科</option>
+							<option value="7">台達電</option>
+							<option value="8">鴻海</option>
+							<option value="9">聯電</option>
+							<option value="10">華邦電</option>
+							<option value="11">南亞科</option>
+							<option value="12">力積電</option>
+							<option value="13">旺宏</option>
+							<option value="14">台勝科</option>
+							<option value="15">亞泥</option>							
+							<option value="16">00980A</option>
+							<option value="17">00981A</option>
+							<option value="18">00982A</option>
+							<option value="19">00992A</option>
+							<option value="20">0050</option>
+							<option value="9999">停止</option>
+					</select>				  
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Chart -->
+			  <div class="chart-card">
+				<canvas id="mainChart"></canvas>
+			  </div>
+
+			  <!-- Stats -->
+			  <div class="stats-grid">
+				<div class="stat-card">
+				  <div class="stat-label">開盤價</div>
+				  <div class="stat-value" id="statOpen">—</div>
+				</div>
+				<div class="stat-card">
+				  <div class="stat-label">最高價</div>
+				  <div class="stat-value gain-text" id="statHigh">—</div>
+				</div>
+				<div class="stat-card">
+				  <div class="stat-label">最低價</div>
+				  <div class="stat-value loss-text" id="statLow">—</div>
+				</div>
+			  </div>
+
+			  <!-- Market Overview -->
+			  <div class="market-list" id="marketList"></div>
+			</div>			
+			<!-- 外部程式 end -->
+
+<script src="js/kprice.js"></script>
+</body>
+</html>
