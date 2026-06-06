@@ -18,12 +18,12 @@
  let show_YearRpt="" , show_SeasonRpt="" , show_MonthRpt="" , tr_line="" ; 
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
-	startShow(symId);
 	const url1=window.location.href;
 	const url2=window.location.origin;
 	const url3=window.location.pathname;
-	const url4=window.location.searc;	
+	const url4=window.location.search;	
 	console.log(url1,url2,url3,url4);
+	startShow(symId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
 		  clearInterval(intervalIds.pop());
