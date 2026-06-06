@@ -19,13 +19,11 @@
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
 	startShow(symId);
-	/*
 	const url1=window.location.href;
 	const url2=window.location.origin;
 	const url3=window.location.pathname;
 	const url4=window.location.searc;	
 	console.log(url1,url2,url3,url4);
-	*/
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
 		  clearInterval(intervalIds.pop());
@@ -340,7 +338,7 @@ function drawSpark(svgEl, data, isGain) {
 	row.id = 'mrow-0';
 	const sparkEl = document.createElement('span');
 	sparkEl.className = 'mini-spark';
-	// drawSpark(sparkEl, m.spark, isGain);
+	drawSpark(sparkEl, m.spark, isGain);
 	row.innerHTML = `
 	  <div class="market-name-col">
 		<div class="name">${m.sym}</div>
@@ -435,7 +433,7 @@ state.markets.forEach(m => {
 	await renderMain(symId);
 	await renderMarkets(symId);
 	  id=setInterval(async() => {
-			const marketClosetime = "13:30:00"; 
+			const marketClosetime = "16:30:00"; 
 			const [h, m, s] = marketClosetime.split(':').map(Number);
 			const timeToSeconds= h * 3600 + m * 60 + s ;
 			const now = new Date();
@@ -448,6 +446,7 @@ state.markets.forEach(m => {
 			await resizeCanvas(symId);
 			await renderMain(symId);
 			await renderMarkets(0);
+			await tick(0);
 
 		  /*
 			 const post1= await getData(symId);
