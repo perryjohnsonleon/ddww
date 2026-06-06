@@ -21,8 +21,9 @@
 	const url1=window.location.href;
 	const url2=window.location.origin;
 	const url3=window.location.pathname;
-	const url4=window.location.search;	
-	console.logurl3);
+	const url4=window.location.search;
+	const stockId = url4.substring(url4.indexOf('=') + 1);
+	console.log(stockId); 
 	startShow(symId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
