@@ -22,7 +22,7 @@
 	const url2=window.location.origin;
 	const url3=window.location.pathname;
 	const url4=window.location.search;	
-	console.log(url1,url2,url3,url4);
+	console.logurl3);
 	startShow(symId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
