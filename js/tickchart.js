@@ -13,41 +13,38 @@
  const mask_button = document.getElementById("collapseBtn2") ;
  let running=false,sw_no=1,firstVisit = true ;     // original value:  true 
  let refSec = 3000 ; // original value:  0
- let symId=0,count=0 ,stockId=0 , btn2_expandId= ""  ;
+ let stockId=0,count=0 , btn2_expandId= ""  ;
  let width = 0 , intervalIds = [] , itemPrice_matrix=[] , itemPrice_arry = [] , itemYear_arry11 = [] , itemYear_arry12 = [] , itemYear_arry13 = [] , itemYear_arry21 = [] , itemYear_arry22 = [] , itemYear_arry23 = [] ;
  let show_YearRpt="" , show_SeasonRpt="" , show_MonthRpt="" , tr_line="" ; 
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
-	const url1=window.location.href;
-	const url2=window.location.origin;
-	const url3=window.location.pathname;
-	const url4=window.location.search;
-	const stockId = url4.substring(url4.indexOf('=') + 1);
+	const url=window.location.search;
+	stockId = url.substring(url.indexOf('=') + 1);
 	console.log(stockId); 
-	startShow(symId);
+	startShow(stockId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
 		  clearInterval(intervalIds.pop());
 		}
-		symId=event.target.value;	
-		if (symId == 9999)	{
+		stockId=event.target.value;	
+		if (stockId == 9999)	{
 			return }  
 		else  {
-			startShow(symId)
+			startShow(stockId)
 		}	
 	});
   }); 
    
-  async function getData(symId) {
+  async function getData(stockId) {
 	  try {
 	  	let fetchUrl_str="" ;
 		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
-		if (symId == 9999) {
+		if (stockId == 9999) {
 			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
-		} else if (symId == 0) {
+		} else if (stockId == 0) {
 			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:TSE01:INDEX&quote=1"
 		} else {
-			fetchUrl_str=fetchUrl_str1 + stockId_list[symId] + fetchUrl_str2
+			fetchUrl_str=fetchUrl_str1 + stockId_list[stockId] + fetchUrl_str2
 		}
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
@@ -73,7 +70,7 @@
  const ctx = canvas.getContext('2d');
  let animFrame;
 
- function resizeCanvas(symId) {
+ function resizeCanvas(stockId) {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement.getBoundingClientRect();
   canvas.width = rect.width * dpr;
@@ -186,9 +183,9 @@ function drawSpark(svgEl, data, isGain) {
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
- async function renderMain(symId) {
+ async function renderMain(stockId) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,midPrice;
-	  const post = await getData(symId);
+	  const post = await getData(stockId);
 	  if (post) {		  
 			const wi_o=post.data.o;
 			const wi_h=post.data.h;
@@ -248,9 +245,10 @@ function drawSpark(svgEl, data, isGain) {
   drawChart();
 }
 
- async function graphcardRender(symId) {
+ async function graphcardRender(stockId) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,flatPrice,midPrice;
-	  const post = await getData(symId);
+	  console.log(111,stockId) ;
+	  const post = await getData(stockId);
 	  if (post) {		  
 			const wi_o=post.data.o;
 			const wi_h=post.data.h;
@@ -299,7 +297,7 @@ function drawSpark(svgEl, data, isGain) {
 		}
   }
 
- async function renderMarkets(symId) {
+ async function renderMarkets(stockId) {
   let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
   const m = state.markets;
   const post = await getData(9999);
@@ -362,7 +360,7 @@ function drawSpark(svgEl, data, isGain) {
  }
 
 // ── UPDATE ─────────────────────────────────────────────────────────────────
-function tick(symId) {
+function tick(stockId) {
   // Main stock update
   const volatility = 0.0012;
   const drift = (Math.random() - 0.499) * volatility;
@@ -372,7 +370,7 @@ function tick(symId) {
   if (state.main.price < state.main.low) state.main.low = state.main.price;
   state.history.push(state.main.price);
   if (state.history.length > 120) state.history.shift();
-  renderMain(symId);
+  renderMain(stockId);
 
   // Market rows update
   state.markets.forEach((m, idx) => {
@@ -428,11 +426,11 @@ state.markets.forEach(m => {
   m.change = parseFloat(((Math.random() - 0.48) * m.price * 0.015).toFixed(2));
 });
 
- async function startShow(symId) {
-	await graphcardRender(symId);
-	await resizeCanvas(symId);
-	await renderMain(symId);
-	await renderMarkets(symId);
+ async function startShow(stockId) {
+	await graphcardRender(stockId);
+	await resizeCanvas(stockId);
+	await renderMain(stockId);
+	await renderMarkets(stockId);
 	  id=setInterval(async() => {
 			const marketClosetime = "16:30:00"; 
 			const [h, m, s] = marketClosetime.split(':').map(Number);
@@ -443,15 +441,15 @@ state.markets.forEach(m => {
 				return
 			 else 	
 			  running=true;
-			await graphcardRender(symId);
-			await resizeCanvas(symId);
-			await renderMain(symId);
+			await graphcardRender(stockId);
+			await resizeCanvas(stockId);
+			await renderMain(stockId);
 			await renderMarkets(0);
 			await tick(0);
 
 		  /*
-			 const post1= await getData(symId);
-			 renderMain(symId);
+			 const post1= await getData(stockId);
+			 renderMain(stockId);
 			 const post2= await getData(0);
 			 renderMain(0);	
 		 */
@@ -461,5 +459,5 @@ state.markets.forEach(m => {
    intervalIds.push(id); 
  }   
 
- window.addEventListener('resize', resizeCanvas(symId));
+ window.addEventListener('resize', resizeCanvas(stockId));
  // setInterval(tick, 3000);
