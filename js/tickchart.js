@@ -337,6 +337,7 @@ function drawSpark(svgEl, data, isGain) {
 	row.id = 'mrow-0';
 	const sparkEl = document.createElement('span');
 	sparkEl.className = 'mini-spark';
+	console.log(222,sparkEl,m.spark,isGain) ;
 	drawSpark(sparkEl, m.spark, isGain);
 	row.innerHTML = `
 	  <div class="market-name-col">
@@ -401,6 +402,7 @@ function tick(stockId) {
 
       // Redraw spark
       const sparkEl = rowEl.querySelector('.mini-spark');
+	  console.log(333,sparkEl,m.spark,isGain) ;
       if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
     }
   });
