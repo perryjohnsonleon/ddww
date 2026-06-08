@@ -305,7 +305,7 @@
 				if ( n == "12" ) document.getElementById(elemId_4).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
 				if ( n == "13" ) document.getElementById(elemId_5).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
 				}
-				document.getElementById(elemId_2).innerHTML =  "<button id='" + btn2_expandId + "' onclick=\"window.location.href='https://perryjohnsonleon.github.io/ddww/kprice.htm?stockId=" + stockId + "';\">" + elemId_price + "</button>";
+				document.getElementById(elemId_2).innerHTML =  "<button id='" + btn2_expandId + "' onclick=\"window.location.href='https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockId=" + stockId + "';\">" + elemId_price + "</button>";
 				if (elemId_price_flag === 1)  document.getElementById(btn2_expandId).classList.add('btn-risePrice');
 				if (elemId_price_flag === 0)  document.getElementById(btn2_expandId).classList.add('btn-flatPrice');	
 				if (elemId_price_flag === -1)  document.getElementById(btn2_expandId).classList.add('btn-fellPrice');		
