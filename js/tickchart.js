@@ -1,5 +1,5 @@
 // ── DATA ───────────────────────────────────────────────────────────────────
- const stockId_list=['8888','2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00980A','00981A','00982A','00992A','0050'];	
+ const stockId_list=['8888','2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00403A','00980A','00981A','00982A','00992A','0050'];	
 // ── STATE ──────────────────────────────────────────────────────────────────
  const MAIN = { sym: '大盤指數', name: '2353', price: 27 };
  const MARKETS = [{ sym: '大盤指數',  name: 'NASDAQ 100', sub: 'US Index', price: 32722 }];
@@ -19,8 +19,8 @@
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
 	const url=window.location.search;
-	stockId = url.substring(url.indexOf('=') + 1);
-	console.log(stockId); 
+	// stockId = url.substring(url.indexOf('=') + 1);
+	console.log("【stock-id】",stockId); 
 	startShow(stockId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
@@ -272,7 +272,7 @@ function drawSpark(svgEl, data, isGain) {
 		   if ( incdecPrice>0 ) 
 				incdectxtPrice="+" + incdecPrice.toString()
 		   else incdectxtPrice= incdecPrice ;
-		   midPrice=itemPrice-incdecPrice;	
+		   midPrice=itemPrice-incdecPrice;
 		   m.sys=itemName;
 		   m.price=itemPrice ;
 		   m.open=wi_oo[0] ;
