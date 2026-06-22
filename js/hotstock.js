@@ -260,7 +260,7 @@
 							document.getElementById("wi-d").classList.add("wi-risePrice");
                             } 
                         else {
-                          if (quote_obj[n] === 0){ 
+                          if (quote_obj[n] == 0){ 
                            	document.getElementById("wi-d").classList.add("wi-flatPrice");                           	  	 		
                           }
                           else {
@@ -287,16 +287,13 @@
 				if ( n == "11" ) {
 						if ( quote_obj[n]> 0) {
 								elemId_price_flag= 1 ;
-								document.getElementById(elemId_3).classList.add('risePrice');
 							} 
 						else {
-							if ( quote_obj[n] === 0){ 
+							if ( quote_obj[n] == 0){ 
 								elemId_price_flag= 0 ;
-								document.getElementById(elemId_3).classList.add('flatPrice');
 								}
 							else {
 								elemId_price_flag= -1 ;
-								document.getElementById(elemId_3).classList.add('fellPrice');	
 								}
 						}
 					document.getElementById(elemId_3).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
@@ -306,9 +303,19 @@
 				if ( n == "13" ) document.getElementById(elemId_5).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
 				}
 				document.getElementById(elemId_2).innerHTML =  "<button id='" + btn2_expandId + "' onclick=\"window.location.href='https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockId=" + stockId + "';\">" + elemId_price + "</button>";
-				if (elemId_price_flag === 1)  document.getElementById(btn2_expandId).classList.add('btn-risePrice');
-				if (elemId_price_flag === 0)  document.getElementById(btn2_expandId).classList.add('btn-flatPrice');	
-				if (elemId_price_flag === -1)  document.getElementById(btn2_expandId).classList.add('btn-fellPrice');		
+				if (elemId_price_flag == 1) {
+					document.getElementById(elemId_3).classList.replace('item03', 'risePrice');
+					document.getElementById(btn2_expandId).classList.add('btn-risePrice')
+				}	
+				if (elemId_price_flag == 0) {	
+					document.getElementById(elemId_3).classList.replace('item03', 'flatPrice');			
+					document.getElementById(btn2_expandId).classList.add('btn-flatPrice');
+					
+				}
+				if (elemId_price_flag == -1)  {
+					document.getElementById(elemId_3).classList.replace('item03', 'fellPrice');						
+					document.getElementById(btn2_expandId).classList.add('btn-fellPrice');
+				}
 			}
 	  }
   } 
