@@ -128,7 +128,7 @@ canvas {
  width:74px;
 }
 
-.item3 {
+.item3,.item03{
  font-size:12px;
  color:#FFB300;
  border-style:solid;
@@ -159,25 +159,39 @@ canvas {
   display:none;
 }
 
-  
 .risePrice {
-  color: #F30E4B;
+  color:#F30E4B !important;
+  font-size:12px;
+  border-style:solid;
+  border-color:#103232;
+  border-width:1px;
+  width:52px;
   }
 
 .fellPrice {
-  color: #1DC91D;
+  color:#1DC91D !important;
+  font-size:12px;
+  border-style:solid;
+  border-color:#103232;
+  border-width:1px;
+  width:52px;
   }
-
-.flatPrice {
-  color:#c3dbbd;
+  
+ .flatPrice {
+  color:#fff !important;
+  font-size:12px;
+  color:#FFB300;
+  border-style:solid;
+  border-color:#103232;
+  border-width:1px;
+  width:52px;
   }
-
+  
  .wi-risePrice {
   color: #F30E4B;
-  
   }
 
- .wi-fellPrice {
+ .wi-flatPrice {
   color: #1DC91D;
   }
 
