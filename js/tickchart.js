@@ -45,7 +45,7 @@
 		} else if (stockId == 0) {
 			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:TSE01:INDEX&quote=1"
 		} else {
-			fetchUrl_str=fetchUrl_str1 + stockId_list[stockId] + fetchUrl_str2
+			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
 		}
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
