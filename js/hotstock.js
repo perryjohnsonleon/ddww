@@ -311,7 +311,7 @@
 			  else pricebtn.classList.add('flatPrice');			  
 			  pricebtn.textContent = MAIN.price;
 			//  pricebtn.onclick = "window.location.href='https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockId=" + stockId + "'";  
-			  pricebtn.onclick = () => showRealprice(stockNo) ;  	 
+			  pricebtn.onclick = () => showRealprice(stockId) ;  	 
 			  priceCell.appendChild(pricebtn);
 			  row.appendChild(priceCell);
 			  const gainCell = document.createElement('div');
