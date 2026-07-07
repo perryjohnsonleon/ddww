@@ -13,14 +13,13 @@
  const mask_button = document.getElementById("collapseBtn2") ;
  let running=false,sw_no=1,firstVisit = true ;     // original value:  true 
  let refSec = 3000 ; // original value:  0
- let stockId,count=0 , btn2_expandId= ""  ;
+ let stockId=0,count=0 , btn2_expandId= ""  ;
  let width = 0 , intervalIds = [] , itemPrice_matrix=[] , itemPrice_arry = [] , itemYear_arry11 = [] , itemYear_arry12 = [] , itemYear_arry13 = [] , itemYear_arry21 = [] , itemYear_arry22 = [] , itemYear_arry23 = [] ;
  let show_YearRpt="" , show_SeasonRpt="" , show_MonthRpt="" , tr_line="" ; 
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
 	const url=window.location.search;
 	// stockId = url.substring(url.indexOf('=') + 1);
-	stockId = url.substring(9,13);
 	console.log("【stock-id】",stockId); 
 	startShow(stockId);
 	document.getElementById("s01").addEventListener("change", function(event) {
@@ -45,7 +44,7 @@
 		} else if (stockId == 0) {
 			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:TSE01:INDEX&quote=1"
 		} else {
-			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
+			fetchUrl_str=fetchUrl_str1 + stockId_list[stockId] + fetchUrl_str2
 		}
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
