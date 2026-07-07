@@ -1,5 +1,5 @@
 	const element1 = document.getElementById("myBar1");
-	const list1=['2330','2454','2308','2317','2303','2356','2357','2353','1102','2324','2344','8299','2408','6770','2337','2347','2371','1504','2891','00403A','00982A','00980A','00981A','0050','0056'];
+	const list1=['2330','2454','2308','2317','2303','2356','2357','2353','1102','2324','2344','8299','2408','6770','2337','2347','2371','1504','2891','00403A','00991A','00982A','00980A','00981A','0050','0056'];
 	const list2=['2330','2454','3661','3443','2303','2606','9940','3042','2603','1713','2609','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'] ;
 	const list3=['2882','2887','2891','2881','2884','2883','2892','2886','2838','2885','2890','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const list4=['2603','2606','2605','2609','2610','2618','2615','2633','2645','2646','2634','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
@@ -10,14 +10,15 @@
 	const list9=['1216','1210','1215','1229','1217','1218','1201','1702','1203','1737','3054','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const list10=['1903','1904','1905','1906','1907','1909','6790','6790','6790','6790','6790','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const list11=['6214','2427','2453','2468','2471','2480','3029','4994','5203','6112','6183','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
-	const MAIN = { sym: '大盤指數', name: '2353', price: 27 };
+	const MAIN = { sym: '大盤指數', id: '2353', price: 0 , high: 0, low: 0, change: 0 };
 	const MARKETS = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11];
 	const state = {
 	  main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 , flat:0},
 	  markets: MARKETS.map(m => ({ ...m, change: 0, spark: [] })),
 	  history: [],
 	 };
-	STOCKS = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11];	 
+	STOCKS = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11];
+	const mainList = document.getElementById("marketList") ;
 	const mask_item1 = document.getElementById("hiddenMsg1") ;
 	const mask_item2 = document.getElementById("hiddenMsg2") ;
 	const mask_button = document.getElementById("collapseBtn2") ;
@@ -40,7 +41,7 @@
 			if (symId == 9999)	{
 				return }  
 			else  {
-				startShow(symId)
+			startShow(symId)
 			}	
 		});		
 	}); 
@@ -72,7 +73,7 @@
 	}
 		
  
- async function getPost(stockId) {
+  async function getPost(stockId) {
 	  try {
 		let fetchUrl_str="" ;
 		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1"   ;
@@ -92,7 +93,7 @@
 		console.error('Fetch error:', error);
 		return null;
      }
-  }
+   }
   
     async function getWDATA() {
 		await displayPost(7777);
@@ -181,7 +182,7 @@
 
    async function getPostYOY(stockId,firstVisit) {
 	  try { 
-		fetchUrl_str="https://marketinfo.api.cnyes.com/mi/api/v1/financialIndicator/revenue/TWS:" + stockId_list[stockId] + ":STOCK?year=5&to=1572364800" ;
+		fetchUrl_str="https://marketinfo.api.cnyes.com/mi/api/v1/financialIndicator/revenue/TWS:" + stockId + ":STOCK?year=5&to=1572364800" ;
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
 		  throw new Error(`HTTP error! status: ${response.status}`);
@@ -196,7 +197,7 @@
 
    async function getPostEPS(stockId,firstVisit) {
 	  try { 
-		fetchUrl_str="https://marketinfo.api.cnyes.com/mi/api/v1/financialIndicator/eps/TWS:" + stockId_list[stockId] + ":STOCK?resolution=Q&acc=false&year=5&to=1573488000" ;
+		fetchUrl_str="https://marketinfo.api.cnyes.com/mi/api/v1/financialIndicator/eps/TWS:" + stockId + ":STOCK?resolution=Q&acc=false&year=5&to=1573488000" ;
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
 		  throw new Error(`HTTP error! status: ${response.status}`);
@@ -276,47 +277,60 @@
 			}	
 	  }
 	  else {
-			const num = itemId+1 ;
-			let elemId_1="item-1" + num , elemId_2="item-2" + num , elemId_3="item-3" + num , elemId_4="item-4" + num , elemId_5="item-5" + num ;
-			btn2_expandId = "btn2-expandId" + num ; 
-			if (post) {
+		   // ================================
+		   //  Build Market List
+		  if (post) {
 				const quote_obj = post.data.quote ;
-				for ( var n in quote_obj) {
-				if ( n == "200009" ) document.getElementById(elemId_1).innerHTML =  "<button class='btn-expand' onclick='showElement(" + stockId + ",false);'>" + quote_obj[n] + "</button>" ;
-				if ( n == "6" ) elemId_price= quote_obj[n] ;
-				if ( n == "11" ) {
-						if ( quote_obj[n]> 0) {
-								elemId_price_flag= 1 ;
-							} 
-						else {
-							if ( quote_obj[n] == 0){ 
-								elemId_price_flag= 0 ;
-								}
-							else {
-								elemId_price_flag= -1 ;
-								}
-						}
-					document.getElementById(elemId_3).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
-				
-				}	   
-				if ( n == "12" ) document.getElementById(elemId_4).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
-				if ( n == "13" ) document.getElementById(elemId_5).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
-				}
-				document.getElementById(elemId_2).innerHTML =  "<button id='" + btn2_expandId + "' onclick=\"window.location.href='https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockId=" + stockId + "';\">" + elemId_price + "</button>";
-				if (elemId_price_flag == 1) {
-					document.getElementById(elemId_3).classList.replace('item03', 'risePrice');
-					document.getElementById(btn2_expandId).classList.add('btn-risePrice')
-				}	
-				if (elemId_price_flag == 0) {	
-					document.getElementById(elemId_3).classList.replace('item03', 'flatPrice');			
-					document.getElementById(btn2_expandId).classList.add('btn-flatPrice');
-					
-				}
-				if (elemId_price_flag == -1)  {
-					document.getElementById(elemId_3).classList.replace('item03', 'fellPrice');						
-					document.getElementById(btn2_expandId).classList.add('btn-fellPrice');
-				}
-			}
+			    for ( var n in quote_obj) {
+					if ( n == "200009" ) MAIN.sys=quote_obj[n];
+					if ( n == "6" ) MAIN.price= quote_obj[n];
+					if ( n == "11" ) MAIN.change=quote_obj[n];  
+					if ( n == "12" ) MAIN.high=quote_obj[n];
+					if ( n == "13" ) MAIN.low= quote_obj[n];
+				} 
+				// document.getElementById(elemId_2).innerHTML =  "<button id='" + btn2_expandId + "' onclick=\"window.location.href='https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockId=" + stockId + "';\">" + elemId_price + "</button>";
+		   }
+		   // ================================
+			  const row = document.createElement('div');
+			  row.style.display = 'flex';
+			  // Name cell with button
+			  const nameCell = document.createElement('div');
+			  nameCell.className = 'item2';
+			  const namebtn = document.createElement('button');
+			  namebtn.className = 'btn-expand1'; 
+			  namebtn.textContent = MAIN.sys;
+			  namebtn.onclick = () => showElement(stockId,firstVisit);  
+			  nameCell.appendChild(namebtn);
+			  row.appendChild(nameCell);
+			  const priceCell = document.createElement('div');
+			  priceCell.className = 'item3';
+			  const pricebtn = document.createElement('button');
+			  pricebtn.className = 'btn-expand1';
+			  if (MAIN.change > 0) pricebtn.classList.add('risePrice');
+			  else if (MAIN.change < 0) pricebtn.classList.add('fellPrice');
+			  else pricebtn.classList.add('flatPrice');			  
+			  pricebtn.textContent = MAIN.price;
+			//  pricebtn.onclick = "window.location.href='https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockId=" + stockId + "'";  
+			  pricebtn.onclick = () => showRealprice(stockNo) ;  	 
+			  priceCell.appendChild(pricebtn);
+			  row.appendChild(priceCell);
+			  const gainCell = document.createElement('div');
+			  gainCell.className = 'item3';
+			  gainCell.textContent = MAIN.change;
+			  if (MAIN.change > 0) gainCell.classList.add('risePrice');
+			  else if (MAIN.change < 0) gainCell.classList.add('fellPrice');
+			  else gainCell.classList.add('flatPrice');
+			  row.appendChild(gainCell);
+			  [MAIN.high, MAIN.low].forEach(value => {
+				const cell = document.createElement('div');
+				cell.className = 'item3';
+				cell.textContent = value;
+				row.appendChild(cell);
+			  });
+			  mainList.appendChild(row);	
+		   // ================================
+		   //  Build Market List --- Ending
+		   // ================================
 	  }
   } 
 
@@ -474,6 +488,10 @@
 		await displayPostYE1(stockNo,firstVisit);
 		await displayPostYE2(stockNo,firstVisit);  
     }
+	
+	async function showRealprice(stockNo) {
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockid=' + stockNo ;
+    }
 
 
 	function collapseElement() {
@@ -505,10 +523,12 @@
     }
 	  
   async function startShow(sel_No) {
+	mainList.textContent = "";
     stockId_list=STOCKS[sel_No];
 	await displayPost(9999);
 	for (let i=0;i<stockId_list.length;i++) {
 		await displayPost(stockId_list[i],i);
+		// console.log(row)
 	}
 	/*
     const result = numbers.map((value, index) => {
