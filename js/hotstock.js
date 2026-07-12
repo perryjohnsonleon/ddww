@@ -1,4 +1,3 @@
-	const element1 = document.getElementById("myBar1");
 	const list1=['2330','2454','2308','2317','2303','2356','2357','2353','1102','2324','2344','8299','2408','6770','2337','2347','2371','1504','2891','00403A','00991A','00982A','00980A','00981A','0050','0056'];
 	const list2=['2330','2454','3661','3443','2303','2606','9940','3042','2603','1713','2609','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'] ;
 	const list3=['2882','2887','2891','2881','2884','2883','2892','2886','2838','2885','2890','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
@@ -32,7 +31,6 @@
 		mask_item1.style.display == "none" ;
 		mask_item2.style.display == "none" ;
 		startShow(0);
-		element1.style.width = '0%';
 		document.getElementById("s01").addEventListener("change", function(event) {
 		   while(intervalIds.length) {
 			  clearInterval(intervalIds.pop());
@@ -490,7 +488,7 @@
     }
 	
 	async function showRealprice(stockNo) {
-		window.location.href = 'https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockid=' + stockNo ;
+		window.location.href = 'https://perryjohnsonleon.github.io/winder/tickchart.htm?stockid=' + stockNo ;
     }
 
 

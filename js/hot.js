@@ -1,5 +1,5 @@
 	const element1 = document.getElementById("myBar1");
-	const stockId_list=['2330','2454','2308','2317','2303','2356','2353','1102','2324','2344','2408','6770','2337','2347','2371','1504','2891','2887','2884','00982A','00980A','00981A','0050','0056'];
+	const stockId_list=['2330','2454','2308','2317','2303','2356','2357','2353','1102','2324','2344','2408','6770','2337','2347','2371','1504','2891','2887','2884','00982A','00980A','00981A','0050','0056'];
 	const mask_item1 = document.getElementById("hiddenMsg1") ;
 	const mask_item2 = document.getElementById("hiddenMsg2") ;
 	const mask_button = document.getElementById("collapseBtn2") ;
@@ -731,4 +731,5 @@
 		await displayPost(21);
 		await displayPost(22);
 		await displayPost(23);
+		await displayPost(24);
 	}  
