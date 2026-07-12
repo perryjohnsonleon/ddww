@@ -21,7 +21,6 @@
 	const url=window.location.search;
 	// stockId = url.substring(url.indexOf('=') + 1);
 	stockId = url.substring(9);
-	console.log("【stock-id】",stockId); 
 	startShow(stockId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
@@ -248,7 +247,6 @@ function drawSpark(svgEl, data, isGain) {
 
  async function graphcardRender(stockId) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,flatPrice,midPrice;
-	  console.log(111,stockId) ;
 	  const post = await getData(stockId);
 	  if (post) {		  
 			const wi_o=post.data.o;
@@ -338,7 +336,6 @@ function drawSpark(svgEl, data, isGain) {
 	row.id = 'mrow-0';
 	const sparkEl = document.createElement('span');
 	sparkEl.className = 'mini-spark';
-	console.log(222,sparkEl,m.spark,isGain) ;
 	drawSpark(sparkEl, m.spark, isGain);
 	row.innerHTML = `
 	  <div class="market-name-col">
@@ -403,7 +400,6 @@ function tick(stockId) {
 
       // Redraw spark
       const sparkEl = rowEl.querySelector('.mini-spark');
-	  console.log(333,sparkEl,m.spark,isGain) ;
       if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
     }
   });
