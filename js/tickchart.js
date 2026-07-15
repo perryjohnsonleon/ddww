@@ -171,6 +171,7 @@
 }
 
 // ── SPARKS ─────────────────────────────────────────────────────────────────
+/*
 function drawSpark(svgEl, data, isGain) {
   const W = 60, H = 24;
   const min = Math.min(...data), max = Math.max(...data), rng = max - min || 1;
@@ -181,7 +182,7 @@ function drawSpark(svgEl, data, isGain) {
     <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
 }
-
+*/
 // ── RENDER ─────────────────────────────────────────────────────────────────
  async function renderMain(stockId) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,midPrice;
@@ -336,7 +337,7 @@ function drawSpark(svgEl, data, isGain) {
 	row.id = 'mrow-0';
 	const sparkEl = document.createElement('span');
 	sparkEl.className = 'mini-spark';
-	drawSpark(sparkEl, m.spark, isGain);
+	// drawSpark(sparkEl, m.spark, isGain);
 	row.innerHTML = `
 	  <div class="market-name-col">
 		<div class="name">${m.sym}</div>
@@ -400,7 +401,7 @@ function tick(stockId) {
 
       // Redraw spark
       const sparkEl = rowEl.querySelector('.mini-spark');
-      if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
+      // if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
     }
   });
 }
@@ -441,7 +442,7 @@ state.markets.forEach(m => {
 			if (((nowSeconds > timeToSeconds2) && (nowSeconds < timeToSeconds1)) || running) 
 				return
 			 else 	
-			  running=true;
+			  running=true ;
 			await graphcardRender(stockId);
 			await resizeCanvas(stockId);
 			await renderMain(stockId);
@@ -455,7 +456,7 @@ state.markets.forEach(m => {
 		 */
 			 running=false ;
 		},
-   3000);
+   20000);
    intervalIds.push(id); 
  }   
 
