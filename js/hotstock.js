@@ -7,7 +7,7 @@
 	const list7=['2501','2504','2528','2542','5522','2515','2520','2539','2536','2540','2505','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const list8=['1402','1409','1413','1414','1417','1418','1419','1419','1434','1440','1441','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const list9=['1216','1210','1215','1229','1217','1218','1201','1702','1203','1737','3054','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
-	const list10=['1903','1904','1905','1906','1907','1909','6790','6790','6790','6790','6790','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
+	const list10=['1903','1904','1905','1906','1907','1909','6790','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const list11=['6214','2427','2453','2468','2471','2480','3029','4994','5203','6112','6183','0050','00878','006208','00713','00692','00881','00919','00940','00757','00982A','00983A','00984A','00985A','00992A'];
 	const MAIN = { sym: '大盤指數', id: '2353', price: 0 , high: 0, low: 0, change: 0 };
 	const MARKETS = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11];
@@ -36,11 +36,12 @@
 			  clearInterval(intervalIds.pop());
 			}
 			const symId=event.target.value;	
-			if (symId == 9999)	{
-				return }  
-			else  {
-			startShow(symId)
-			}	
+			if (symId == 9999)	
+				return   
+			else if (symId === "Z" )
+				displayWPost()
+			else
+				startShow(symId) ;				
 		});		
 	}); 
 		
@@ -80,7 +81,7 @@
 		else
 			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2 ;
 		if (stockId == 8888 ) fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN" ;
-		if (stockId == 7777 ) fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN" ;		
+		if (stockId == 7777 ) fetchUrl_str="https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=1&limit=20" ;		
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
 		  throw new Error(`HTTP error! status: ${response.status}`);
@@ -98,7 +99,7 @@
 	}  
   
   
-       function getWDATA1() {
+   function getWDATA1() {
 		// https://invest.cnyes.com/indices/major 世界各國主要指數
 		// https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=1&limit=20	
 		// data.items ['200009'品名,'11'收盤,'12'最高,'13'最低]	 陣列排序 1.日本 2. 韓國 ˇ3.集中 4.櫃買 5.6.恆生 7.8.9.10上證滬深 11 英 12 法 13 德
@@ -106,7 +107,6 @@
 		// https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=2&limit=10
 		// data.items ['200009'品名,'11'收盤,'12'最高,'13'最低]	 陣列排序 4.道瓊 6.NASDAQ 5. SP500 7. 費城半導體
         $.getJSON('https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=2&limit=10',function(data){
-            // console.log('success');
           $.each(data,function(key1,item1){
              if (key1 === 'data') {
              //  $('ul').append('<li>'+item1+'</li>');
@@ -207,44 +207,89 @@
 		return null;
      }
   }
-
- async function displayWPost() {
-	   const post = await getPost(7777);
-	   let elemId_price = "" , elemId_price_flag = 0;
-	   const num = stockId+1 ;
-	   let elemId_1="item-1" + num , elemId_2="item-2" + num , elemId_3="item-3" + num , elemId_4="item-4" + num , elemId_5="item-5" + num ;
-	   if (post) {
-			const quote_obj = post.data.quote ;
-			for ( var n in quote_obj) {
-				if ( n == "200009" ) document.getElementById(elemId_1).innerHTML =  quote_obj[n] ;
-				if ( n == "6" ) elemId_price= quote_obj[n] ;
-				if ( n == "11" ) {
-						if ( quote_obj[n]> 0) {
-								elemId_price_flag= 1 ;
-								document.getElementById(elemId_3).classList.add('risePrice');
-							} 
-						else {
-							if ( quote_obj[n] === 0){ 
-								elemId_price_flag= 0 ;
-								document.getElementById(elemId_3).classList.add('flatPrice');
-								}
-							else {
-								elemId_price_flag= -1 ;
-								document.getElementById(elemId_3).classList.add('fellPrice');	
-								}
-						}
-					document.getElementById(elemId_3).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
-				
-				}	   
-				if ( n == "12" ) document.getElementById(elemId_4).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
-				if ( n == "13" ) document.getElementById(elemId_5).innerHTML =  "<span class='span_rpt'>" + quote_obj[n] + "</span>" ;
-			}
-			document.getElementById(elemId_2).innerHTML =  "<button id='" + btn2_expandId +"' onclick='realtimePrice(" + stockId + ",true);'>" + elemId_price + "</button>" ;
-			if (elemId_price_flag === 1)  document.getElementById(btn2_expandId).classList.add('btn-risePrice');
-			if (elemId_price_flag === 0)  document.getElementById(btn2_expandId).classList.add('btn-flatPrice');	
-			if (elemId_price_flag === -1)  document.getElementById(btn2_expandId).classList.add('btn-fellPrice');		
-	  }
-  } 
+  
+  async function displayWPost() {
+	  mainList.textContent = "";
+	  const post = await getPost(7777);
+	  if (post) {
+			const ITEMS = post.data.items ;
+			const ITEM1 = ITEMS.slice(13, 17);
+			const ITEM2 = ITEMS.slice(0, 12);	
+			ITEM1.forEach((quote_obj,idx) => {
+				for ( var n in quote_obj) {
+					if ( n == "200009" ) MAIN.sys=quote_obj[n];
+					if ( n == "6" ) MAIN.price= quote_obj[n];
+					if ( n == "11" ) MAIN.change=quote_obj[n];  
+					if ( n == "12" ) MAIN.high=quote_obj[n];
+					if ( n == "13" ) MAIN.low= quote_obj[n];
+				} 
+				  const row = document.createElement('div');
+				  row.style.display = 'flex';
+				  const nameCell = document.createElement('div');
+				  nameCell.className = 'item2';
+				  nameCell.textContent = MAIN.sys;
+				  row.appendChild(nameCell);
+				  const priceCell = document.createElement('div');
+				  priceCell.className = 'item3w';
+				  priceCell.textContent = MAIN.price;		  
+				  if (MAIN.change > 0) priceCell.classList.add('risePrice');
+				  else if (MAIN.change < 0) priceCell.classList.add('fellPrice');
+				  else priceCell.classList.add('flatPrice');			  
+				  row.appendChild(priceCell);
+				  const gainCell = document.createElement('div');
+				  gainCell.className = 'item3w';
+				  gainCell.textContent = MAIN.change;
+				  if (MAIN.change > 0) gainCell.classList.add('risePrice');
+				  else if (MAIN.change < 0) gainCell.classList.add('fellPrice');
+				  else gainCell.classList.add('flatPrice');
+				  row.appendChild(gainCell);
+				  [MAIN.high, MAIN.low].forEach(value => {
+					const cell = document.createElement('div');
+					cell.className = 'item3w';
+					cell.textContent = value;
+					row.appendChild(cell);
+				  });		  
+				  mainList.appendChild(row);							
+			});
+			ITEM2.forEach((quote_obj,idx) => {
+				for ( var n in quote_obj) {
+					if ( n == "200009" ) MAIN.sys=quote_obj[n];
+					if ( n == "6" ) MAIN.price= quote_obj[n];
+					if ( n == "11" ) MAIN.change=quote_obj[n];  
+					if ( n == "12" ) MAIN.high=quote_obj[n];
+					if ( n == "13" ) MAIN.low= quote_obj[n];
+				} 
+				  const row = document.createElement('div');
+				  row.style.display = 'flex';
+				  const nameCell = document.createElement('div');
+				  nameCell.className = 'item2';
+				  nameCell.textContent = MAIN.sys;
+				  row.appendChild(nameCell);
+				  const priceCell = document.createElement('div');
+				  priceCell.className = 'item3w';
+				  priceCell.textContent = MAIN.price;		  
+				  if (MAIN.change > 0) priceCell.classList.add('risePrice');
+				  else if (MAIN.change < 0) priceCell.classList.add('fellPrice');
+				  else priceCell.classList.add('flatPrice');			  
+				  row.appendChild(priceCell);
+				  const gainCell = document.createElement('div');
+				  gainCell.className = 'item3w';
+				  gainCell.textContent = MAIN.change;
+				  if (MAIN.change > 0) gainCell.classList.add('risePrice');
+				  else if (MAIN.change < 0) gainCell.classList.add('fellPrice');
+				  else gainCell.classList.add('flatPrice');
+				  row.appendChild(gainCell);
+				  [MAIN.high, MAIN.low].forEach(value => {
+					const cell = document.createElement('div');
+					cell.className = 'item3w';
+					cell.textContent = value;
+					row.appendChild(cell);
+				  });		  
+				  mainList.appendChild(row);							
+			});
+	   }
+	
+  }  
 
  async function displayPost(stockId,itemId) {
 	  const post = await getPost(stockId);
@@ -325,6 +370,22 @@
 				cell.textContent = value;
 				row.appendChild(cell);
 			  });
+			  const abacusCell = document.createElement('div');
+			  abacusCell.className = 'item-abacus';
+			  const abacusbtn = document.createElement('button');
+			  abacusbtn.className = 'btn-expand2'; 
+			  abacusbtn.textContent = "\u{1F9EE}" ;
+			  abacusbtn.onclick = () => countProfit(stockId,firstVisit);  
+			  abacusCell.appendChild(abacusbtn);
+			  row.appendChild(abacusCell);
+			  const alarmCell = document.createElement('div');
+			  alarmCell.className = 'item-abacus';
+			  const alarmbtn = document.createElement('button');
+			  alarmbtn.className = 'btn-expand3'; 
+			  alarmbtn.textContent = "\u{1F514}" ;
+			  alarmbtn.onclick = () => showRealprice(stockId) ;  
+			  alarmCell.appendChild(alarmbtn);
+			  row.appendChild(alarmCell);			  
 			  mainList.appendChild(row);	
 		   // ================================
 		   //  Build Market List --- Ending
@@ -471,10 +532,6 @@
 		document.documentElement.scrollTop=0;
   } 
  
- async function realtimePrice(stockId,firstVisit) {	
-	 window.location.href = 'http://perryjohnsonleon.github.io/exercise/index_a.htm' ;
-   }   
-
    function timestampToTime(timestamp) {
         var date = new Date(timestamp * 1000);
         var Y = date.getFullYear() + '-';
@@ -488,9 +545,12 @@
     }
 	
 	async function showRealprice(stockNo) {
-		window.location.href = 'https://perryjohnsonleon.github.io/winder/tickchart.htm?stockid=' + stockNo ;
+		window.location.href = 'http://127.0.0.1:8000/ddww/tickchart.htm?stockid=' + stockNo ;
     }
-
+	
+	async function countProfit(stockNo) {
+		window.location.href = 'http://127.0.0.1:8000/ddww/cal.htm?stockid=' + stockNo ;
+    }
 
 	function collapseElement() {
       mask_item1.style.display="none" ;
@@ -526,7 +586,6 @@
 	await displayPost(9999);
 	for (let i=0;i<stockId_list.length;i++) {
 		await displayPost(stockId_list[i],i);
-		// console.log(row)
 	}
 	/*
     const result = numbers.map((value, index) => {
