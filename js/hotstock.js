@@ -545,11 +545,11 @@
     }
 	
 	async function showRealprice(stockNo) {
-		window.location.href = 'http://127.0.0.1:8000/ddww/tickchart.htm?stockid=' + stockNo ;
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockid=' + stockNo ;
     }
 	
 	async function countProfit(stockNo) {
-		window.location.href = 'http://127.0.0.1:8000/ddww/cal.htm?stockid=' + stockNo ;
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/cal.htm?stockid=' + stockNo ;
     }
 
 	function collapseElement() {
