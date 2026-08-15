@@ -383,7 +383,7 @@
 			  const alarmbtn = document.createElement('button');
 			  alarmbtn.className = 'btn-expand3'; 
 			  alarmbtn.textContent = "\u{1F514}" ;
-			  alarmbtn.onclick = () => showRealprice(stockId) ;  
+			  alarmbtn.onclick = () => alarmPrice(stockId) ;  
 			  alarmCell.appendChild(alarmbtn);
 			  row.appendChild(alarmCell);			  
 			  mainList.appendChild(row);	
@@ -547,6 +547,10 @@
 	async function showRealprice(stockNo) {
 		window.location.href = 'https://perryjohnsonleon.github.io/ddww/tickchart.htm?stockid=' + stockNo ;
     }
+	
+	async function alarmPrice(stockNo) {
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/testalarm.htm?stockid=' + stockNo ;
+    }	
 	
 	async function countProfit(stockNo) {
 		window.location.href = 'https://perryjohnsonleon.github.io/ddww/cal.htm?stockid=' + stockNo ;
