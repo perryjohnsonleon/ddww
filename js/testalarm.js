@@ -68,8 +68,6 @@
   const gaugeEnd = document.getElementById('gaugeEnd');
 
   const indexGrid = document.getElementById('indexGrid');
-  alertTarget.value = alertState.target.toFixed(2);
-  state.main.price
 
  window.addEventListener('load',function(){
 	const url=window.location.search;
