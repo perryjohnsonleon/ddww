@@ -1,5 +1,5 @@
 // ── DATA ───────────────────────────────────────────────────────────────────
- const stockId_list=['8888','2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00980A','00981A','00982A','00992A','0050'];	
+ const stockId_list=['8888','2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00403A','00980A','00981A','00982A','00991A','00992A','0050'];	
 // ── STATE ──────────────────────────────────────────────────────────────────
  const MAIN = { sym: '大盤指數', name: '2353', price: 27 };
  const MARKETS = [{ sym: '大盤指數',  name: 'NASDAQ 100', sub: 'US Index', price: 32722 }];
@@ -13,40 +13,42 @@
  const mask_button = document.getElementById("collapseBtn2") ;
  let running=false,sw_no=1,firstVisit = true ;     // original value:  true 
  let refSec = 3000 ; // original value:  0
- let symId=0,count=0 ,stockId=0 , btn2_expandId= ""  ;
+ let stockId,STOCKID , count=0 , btn2_expandId= ""  ;
  let width = 0 , intervalIds = [] , itemPrice_matrix=[] , itemPrice_arry = [] , itemYear_arry11 = [] , itemYear_arry12 = [] , itemYear_arry13 = [] , itemYear_arry21 = [] , itemYear_arry22 = [] , itemYear_arry23 = [] ;
  let show_YearRpt="" , show_SeasonRpt="" , show_MonthRpt="" , tr_line="" ; 
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
-	startShow(symId);
-	const url1=window.location.href;
-	const url2=window.location.origin;
-	const url3=window.location.pathname;
-	const url4=window.location.searc;	
-	console.log(url1,url2,url3,url4);
+	const url=window.location.search;
+	// stockId = url.substring(url.indexOf('=') + 1);
+	stockId = url.substring(9);
+	startShow(stockId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
 		  clearInterval(intervalIds.pop());
 		}
-		symId=event.target.value;	
-		if (symId == 9999)	{
+		stockId=event.target.value;	
+		if (stockId == 9999)	{
 			return }  
 		else  {
-			startShow(symId)
+			startShow(stockId)
 		}	
 	});
   }); 
    
-  async function getData(symId) {
+  async function getData(stockId) {
+	  if (firstVisit) {
+		  firstVisit=false;
+		  STOCKID=stockId
+	  }	  
 	  try {
 	  	let fetchUrl_str="" ;
 		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
-		if (symId == 9999) {
-			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
-		} else if (symId == 0) {
+		if (stockId == 9999) {
+		    fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
+		} else if (stockId == 0) {
 			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:TSE01:INDEX&quote=1"
 		} else {
-			fetchUrl_str=fetchUrl_str1 + stockId_list[symId] + fetchUrl_str2
+			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
 		}
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
@@ -72,7 +74,7 @@
  const ctx = canvas.getContext('2d');
  let animFrame;
 
- function resizeCanvas(symId) {
+ function resizeCanvas(stockId) {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement.getBoundingClientRect();
   canvas.width = rect.width * dpr;
@@ -97,7 +99,8 @@
     x: pad.left + i * xStep,
     y: pad.top + (max - data[i]) * yScale
   });
-  const isGain = data[data.length - 1] >= data[0];
+  // const isGain = data[data.length - 1] >= data[0];
+  const isGain = state.main.change >=0 ? true : false ;
   const lineColor = isGain ? '#ff1744' : '#00e676';
   const fillColor = isGain ? 'rgba(255,23,68,' : 'rgba(0,230,118,';
   // Area fill
@@ -173,6 +176,7 @@
 }
 
 // ── SPARKS ─────────────────────────────────────────────────────────────────
+/*
 function drawSpark(svgEl, data, isGain) {
   const W = 60, H = 24;
   const min = Math.min(...data), max = Math.max(...data), rng = max - min || 1;
@@ -183,11 +187,11 @@ function drawSpark(svgEl, data, isGain) {
     <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
 }
-
+*/
 // ── RENDER ─────────────────────────────────────────────────────────────────
- async function renderMain(symId) {
+ async function renderMain(stockId) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,midPrice;
-	  const post = await getData(symId);
+	  const post = await getData(stockId);
 	  if (post) {		  
 			const wi_o=post.data.o;
 			const wi_h=post.data.h;
@@ -247,9 +251,9 @@ function drawSpark(svgEl, data, isGain) {
   drawChart();
 }
 
- async function graphcardRender(symId) {
+ async function graphcardRender(stockId) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,flatPrice,midPrice;
-	  const post = await getData(symId);
+	  const post = await getData(stockId);
 	  if (post) {		  
 			const wi_o=post.data.o;
 			const wi_h=post.data.h;
@@ -273,7 +277,7 @@ function drawSpark(svgEl, data, isGain) {
 		   if ( incdecPrice>0 ) 
 				incdectxtPrice="+" + incdecPrice.toString()
 		   else incdectxtPrice= incdecPrice ;
-		   midPrice=itemPrice-incdecPrice;	
+		   midPrice=itemPrice-incdecPrice;
 		   m.sys=itemName;
 		   m.price=itemPrice ;
 		   m.open=wi_oo[0] ;
@@ -298,11 +302,11 @@ function drawSpark(svgEl, data, isGain) {
 		}
   }
 
- async function renderMarkets(symId) {
+ async function renderMarkets(stockId) {
   let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
   const m = state.markets;
   const post = await getData(9999);
-  if (post) {		  
+  if (post) {
 		const wi_o=post.data.o;
 		const wi_h=post.data.h;
 		const wi_c=post.data.c;
@@ -338,7 +342,7 @@ function drawSpark(svgEl, data, isGain) {
 	row.id = 'mrow-0';
 	const sparkEl = document.createElement('span');
 	sparkEl.className = 'mini-spark';
-	drawSpark(sparkEl, m.spark, isGain);
+	// drawSpark(sparkEl, m.spark, isGain);
 	row.innerHTML = `
 	  <div class="market-name-col">
 		<div class="name">${m.sym}</div>
@@ -361,7 +365,7 @@ function drawSpark(svgEl, data, isGain) {
  }
 
 // ── UPDATE ─────────────────────────────────────────────────────────────────
-function tick(symId) {
+function tick(stockId) {
   // Main stock update
   const volatility = 0.0012;
   const drift = (Math.random() - 0.499) * volatility;
@@ -371,7 +375,7 @@ function tick(symId) {
   if (state.main.price < state.main.low) state.main.low = state.main.price;
   state.history.push(state.main.price);
   if (state.history.length > 120) state.history.shift();
-  renderMain(symId);
+  renderMain(stockId);
 
   // Market rows update
   state.markets.forEach((m, idx) => {
@@ -402,7 +406,7 @@ function tick(symId) {
 
       // Redraw spark
       const sparkEl = rowEl.querySelector('.mini-spark');
-      if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
+      // if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
     }
   });
 }
@@ -427,38 +431,42 @@ state.markets.forEach(m => {
   m.change = parseFloat(((Math.random() - 0.48) * m.price * 0.015).toFixed(2));
 });
 
- async function startShow(symId) {
-	await graphcardRender(symId);
-	await resizeCanvas(symId);
-	await renderMain(symId);
-	await renderMarkets(symId);
-	  id=setInterval(async() => {
-			const marketClosetime = "16:30:00"; 
-			const [h, m, s] = marketClosetime.split(':').map(Number);
-			const timeToSeconds= h * 3600 + m * 60 + s ;
-			const now = new Date();
-			const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();	
-			if (nowSeconds > timeToSeconds || running) 
-				return
-			 else 	
-			  running=true;
-			await graphcardRender(symId);
-			await resizeCanvas(symId);
-			await renderMain(symId);
-			await renderMarkets(0);
-			await tick(0);
+ async function startShow(stockId) {
+	await graphcardRender(stockId);
+	await resizeCanvas(stockId);
+	await renderMain(stockId);
+	await renderMarkets(stockId);
+    id=setInterval(async() => {
+		const marketClosetime = "13:30:00" , marketOpentime = "09:00:00" ; 
+		const [h2, m2, s2] = marketClosetime.split(':').map(Number);
+		const timeToSeconds2= h2 * 3600 + m2 * 60 + s2 ;
+		const [h1, m1, s1] = marketOpentime.split(':').map(Number);
+		const timeToSeconds1= h1 * 3600 + m1 * 60 + s1 ;			
+		const now = new Date();
+		const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();	
+		if ((nowSeconds > timeToSeconds1) && (nowSeconds < timeToSeconds2)) {
+			if  (running) return;
+			await graphcardRender(STOCKID);
+			await resizeCanvas(STOCKID);
+			await renderMain(STOCKID);
+			await renderMarkets(STOCKID);
+			// await tick(STOCKID);			
+		}
+		else  { 		 
+			return;
+		 }	
 
-		  /*
-			 const post1= await getData(symId);
-			 renderMain(symId);
-			 const post2= await getData(0);
-			 renderMain(0);	
-		 */
-			 running=false ;
-		},
+	  /*
+		 const post1= await getData(stockId);
+		 renderMain(stockId);
+		 const post2= await getData(0);
+		 renderMain(0);	
+	 */
+		 running=false ;
+	},
    3000);
    intervalIds.push(id); 
  }   
 
- window.addEventListener('resize', resizeCanvas(symId));
+ window.addEventListener('resize', resizeCanvas(stockId));
  // setInterval(tick, 3000);
