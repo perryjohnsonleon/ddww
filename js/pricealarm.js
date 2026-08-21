@@ -256,17 +256,14 @@
       riseTargetDisplay.textContent = '$' + state.rise.target.toFixed(2);
       riseArmedDot.className = 'alert-armed-dot ' + (state.rise.prevHit ? 'fired' : 'armed');
     }
-    if (state.fall.enabled){
+    if (state.fall.enabled){		
       fallTargetDisplay.textContent = '$' + state.fall.target.toFixed(2);
       fallArmedDot.className = 'alert-armed-dot ' + (state.fall.prevHit ? 'fired' : 'armed');
     }
   }
 
   async function getData(stockId) {
-	  if (firstVisit) {
-		  firstVisit=false;
-		  STOCKID=stockId
-	  }	  
+	  if (firstVisit) STOCKID=stockId ;  
 	  try {
 	  	let fetchUrl_str="" ;
 		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
@@ -303,7 +300,6 @@
 			const wi_cc=[...wi_c].reverse();
 			const wi_tt=[...wi_t].reverse();
 			const quote_obj = post.data.quote ;
-			// const isGain = m.change >= 0;
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice=quote_obj[n] ;
@@ -315,8 +311,11 @@
 				incdectxtPrice="+" + incdecPrice.toString()
 		    else incdectxtPrice= incdecPrice ;
 		    midPrice=itemPrice-incdecPrice;
-			state.rise.target= midPrice*1.1 ;
-			state.fall.target= midPrice*0.9 ;			
+			if (firstVisit) {
+				firstVisit= false ;
+				state.rise.target= midPrice*1.1 ;
+				state.fall.target= midPrice*0.9 ;
+			}	
 		    state.sym=itemName;
 		    state.price=itemPrice ;
 			state.flat=midPrice ;
@@ -387,7 +386,7 @@
 
   function checkAlert(){
     if (state.rise.enabled){
-      var riseHit = state.price >= state.rise.target;
+      var riseHit = state.price >= state.rise.target ? true : false ;	  
       if (riseHit && !state.rise.prevHit){
         if (state.chimeOn) startRinging('rise');
         riseArmedDot.className = 'alert-armed-dot fired';
@@ -398,7 +397,7 @@
     }
 
     if (state.fall.enabled){
-      var fallHit = state.price <= state.fall.target;
+      var fallHit = state.price <= state.fall.target ? true : false ;	  
       if (fallHit && !state.fall.prevHit){
         if (state.chimeOn) startRinging('fall');
         fallArmedDot.className = 'alert-armed-dot fired';
@@ -520,7 +519,7 @@
 		await drawChart(stockId);
 		await updateAlertStatus();
 		id=setInterval(async() => {
-			const marketClosetime = "13:30:00" , marketOpentime = "09:00:00" ; 
+			const marketClosetime = "22:30:00" , marketOpentime = "09:00:00" ; 
 			const [h2, m2, s2] = marketClosetime.split(':').map(Number);
 			const timeToSeconds2= h2 * 3600 + m2 * 60 + s2 ;
 			const [h1, m1, s1] = marketOpentime.split(':').map(Number);
@@ -541,7 +540,7 @@
 
 			 running=false ;
 		},
-	   20000);
+	   8000);
 	   intervalIds.push(id); 
  } 
 
