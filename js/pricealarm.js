@@ -81,7 +81,14 @@
   var fallGaugeTargetVal = document.getElementById('fallGaugeTargetVal');
   var fallGaugeTargetLbl = document.getElementById('fallGaugeTargetLbl');
   var noGaugeMsg = document.getElementById('noGaugeMsg');
-  
+  const CODEX= (str) => {
+		  return decodeURIComponent(
+			atob(str).split('').map(
+			  ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')
+			).join('')
+		  );
+   }
+ 
   window.addEventListener('load',function(){
 	    chimeBtn.classList.add('chime-on');
 		const url=window.location.search;
@@ -263,14 +270,15 @@
   }
 
   async function getData(stockId) {
+	  let fetchUrl_str="" ;	  
 	  if (firstVisit) STOCKID=stockId ;  
 	  try {
-	  	let fetchUrl_str="" ;
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
+		let fetchUrl_str1=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOg==');
+		let fetchUrl_str2=CODEX('OlNUT0NLJnF1b3RlPTE=');
 		if (stockId == 9999) {
-		    fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
+		   fetchUrl_str=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3N5bWJvbD1UV1M6VFNFMDE6SU5ERVgmcmVzb2x1dGlvbj1EJnF1b3RlPTEmZnJvbT1OYU4mdG89TmFO') 
 		} else if (stockId == 0) {
-			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:TSE01:INDEX&quote=1"
+			fetchUrl_str=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOlRTRTAxOklOREVYJnF1b3RlPTE=')
 		} else {
 			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
 		}

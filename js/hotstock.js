@@ -21,6 +21,13 @@
 	const mask_item1 = document.getElementById("hiddenMsg1") ;
 	const mask_item2 = document.getElementById("hiddenMsg2") ;
 	const mask_button = document.getElementById("collapseBtn2") ;
+	const CODEX= (str) => {
+	  return decodeURIComponent(
+		atob(str).split('').map(
+		  ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')
+		).join('')
+	  );
+	}
 	let stockId_list=[],running=false,sw_no=1,firstVisit = true ;     // original value:  true 
     let refSec = 3000 ; // original value:  0
 	let count=0 ,stockId=0 , btn2_expandId= ""  ;
@@ -55,8 +62,9 @@
 		}
 		else {
 		  oldCanvas.outerHTML = "<div id='hiddenMsg2' style='display:block;'><canvas id='myChart' width='320' height='200'></canvas><div id='collapseBtn2' style='justify-content:center;'><img src='collapse.png' style='cursor:pointer;' onclick='getpricePost(-1)' /></div></div>" ;
-		}
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1"   ;
+		}				
+		let fetchUrl_str1 = CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOg=='); 
+		let fetchUrl_str2 = CODEX('OlNUT0NLJnF1b3RlPTE=') ;
 		let fetchUrl_str=fetchUrl_str1 + stockId_list[stockId] + fetchUrl_str2 ;
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
@@ -73,15 +81,16 @@
 		
  
   async function getPost(stockId) {
+		let fetchUrl_str; 	  
 	  try {
-		let fetchUrl_str="" ;
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1"   ;
+		let fetchUrl_str1=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOg==');
+		let fetchUrl_str2=CODEX('OlNUT0NLJnF1b3RlPTE=');
 		if (stockId == 9999 ) 
-			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
+			fetchUrl_str=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3N5bWJvbD1UV1M6VFNFMDE6SU5ERVgmcmVzb2x1dGlvbj1EJnF1b3RlPTEmZnJvbT1OYU4mdG89TmFO') 
 		else
 			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2 ;
-		if (stockId == 8888 ) fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN" ;
-		if (stockId == 7777 ) fetchUrl_str="https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=1&limit=20" ;		
+		if (stockId == 8888 ) fetchUrl_str= CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3N5bWJvbD1UV1M6VFNFMDE6SU5ERVgmcmVzb2x1dGlvbj1EJnF1b3RlPTEmZnJvbT1OYU4mdG89TmFO') ;
+		if (stockId == 7777 ) fetchUrl_str= CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92My91bml2ZXJzYWwvcXVvdGU/dHlwZT1JRFhNQUpPUiZjb2x1bW49QiZwYWdlPTEmbGltaXQ9MjA=') ;		
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
 		  throw new Error(`HTTP error! status: ${response.status}`);
@@ -98,89 +107,10 @@
 		await displayPost(7777);
 	}  
   
-  
-   function getWDATA1() {
-		// https://invest.cnyes.com/indices/major 世界各國主要指數
-		// https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=1&limit=20	
-		// data.items ['200009'品名,'11'收盤,'12'最高,'13'最低]	 陣列排序 1.日本 2. 韓國 ˇ3.集中 4.櫃買 5.6.恆生 7.8.9.10上證滬深 11 英 12 法 13 德
-		// 14 道瓊15 S&P500 16 NASDAQ 17 費城半導體	 18 黃金 19 美元
-		// https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=2&limit=10
-		// data.items ['200009'品名,'11'收盤,'12'最高,'13'最低]	 陣列排序 4.道瓊 6.NASDAQ 5. SP500 7. 費城半導體
-        $.getJSON('https://ws.api.cnyes.com/ws/api/v3/universal/quote?type=IDXMAJOR&column=B&page=2&limit=10',function(data){
-          $.each(data,function(key1,item1){
-             if (key1 === 'data') {
-             //  $('ul').append('<li>'+item1+'</li>');
-            var itemData = item1; 	          
-            $.each(itemData,function(key2,item2){
-              if (key2  === 'items' ) {
-                  var itemData2 = item2;
-                  var itemDataTemp ;
-                //  Dowjon - starting
-                $.each(itemData2[3],function(key3,item3){
-                    if (key3 === '6') {
-                      itemDataTemp = item3 ;
-                       }
-                if (key3 === '200009') {
-                 //   $("#dowjon").html(item3 + '<BR>' + itemDataTemp );
-                     }   
-				if (key3 === '11') {
-                         $("#dowjon-p").html(item3);                             	
-                         if (item3> 0) 
-                             {
-                                $("#dowjon-p").addClass("risePrice"); 
-                                $("#dowjon-p").addClass("risePrice"); 
-                             } 
-                         else {
-                            if (item3 === 0){ 
-                               $("#dowjon-p").addClass("flatPrice"); 
-                              $("#dowjon-p").addClass("flatPrice"); 		
-                            }
-                            else {
-                               $("#dowjon-p").addClass("fellPrice"); 
-                              $("#dowjon-p").addClass("fellPrice"); 	
-                            }
-                         }
-                 } 
-                }) ; 
-                //  Dowjon - Ending  
-                //  Nasdaq - starting
-                  $.each(itemData2[5],function(key3,item3){
-                    if (key3 === '6') {
-                         itemDataTemp = item3 ;
-                       }
-                    if (key3 === '200009') {
-                    //  $("#nasdaq").html(item3 + '<BR>' + itemDataTemp );
-                     }   
-                    if (key3 === '11') {
-                        $("#nasdaq-p").html(item3);                              	
-                         if (item3> 0) 
-                             {
-                                $("#nasdaq-p").addClass("risePrice"); 
-                                $("#nasdaq-p").addClass("risePrice"); 
-                             } 
-                         else {
-                            if (item3 === 0){ 
-                               $("#nasdaq-p").addClass("flatPrice"); 
-                              $("#nasdaq-p").addClass("flatPrice"); 		
-                            }
-                            else {
-                               $("#nasdaq-p").addClass("fellPrice"); 
-                              $("#nasdaq-p").addClass("fellPrice"); 	
-                            }
-                         }
-                     } 
-                }) ; 
-                //  Nasdaq - Ending               		              		
-              }
-             });               
-          }
-         });
-        }); 
-    }; 
 
    async function getPostYOY(stockId,firstVisit) {
-	  try { 
-		fetchUrl_str="https://marketinfo.api.cnyes.com/mi/api/v1/financialIndicator/revenue/TWS:" + stockId + ":STOCK?year=5&to=1572364800" ;
+	  try {	  
+		fetchUrl_str=CODEX('aHR0cHM6Ly9tYXJrZXRpbmZvLmFwaS5jbnllcy5jb20vbWkvYXBpL3YxL2ZpbmFuY2lhbEluZGljYXRvci9yZXZlbnVlL1RXUzo=') + stockId + CODEX('OlNUT0NLP3llYXI9NSZ0bz0xNTcyMzY0ODAw') ;
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
 		  throw new Error(`HTTP error! status: ${response.status}`);
@@ -194,8 +124,8 @@
   }
 
    async function getPostEPS(stockId,firstVisit) {
-	  try { 
-		fetchUrl_str="https://marketinfo.api.cnyes.com/mi/api/v1/financialIndicator/eps/TWS:" + stockId + ":STOCK?resolution=Q&acc=false&year=5&to=1573488000" ;
+	  try { 		
+		fetchUrl_str= CODEX('aHR0cHM6Ly9tYXJrZXRpbmZvLmFwaS5jbnllcy5jb20vbWkvYXBpL3YxL2ZpbmFuY2lhbEluZGljYXRvci9lcHMvVFdTOg==') + stockId + CODEX('OlNUT0NLP3Jlc29sdXRpb249USZhY2M9ZmFsc2UmeWVhcj01JnRvPTE1NzM0ODgwMDA=') ;
 		const response = await fetch(fetchUrl_str);
 		if (!response.ok) {
 		  throw new Error(`HTTP error! status: ${response.status}`);
@@ -320,8 +250,6 @@
 			}	
 	  }
 	  else {
-		   // ================================
-		   //  Build Market List
 		  if (post) {
 				const quote_obj = post.data.quote ;
 			    for ( var n in quote_obj) {
@@ -332,10 +260,8 @@
 					if ( n == "13" ) MAIN.low= quote_obj[n];
 				} 
 		   }
-		   // ================================
 			  const row = document.createElement('div');
 			  row.style.display = 'flex';
-			  // Name cell with button
 			  const nameCell = document.createElement('div');
 			  nameCell.className = 'item2';
 			  const namebtn = document.createElement('button');
@@ -385,9 +311,6 @@
 			  alarmCell.appendChild(alarmbtn);
 			  row.appendChild(alarmCell);			  
 			  mainList.appendChild(row);	
-		   // ================================
-		   //  Build Market List --- Ending
-		   // ================================
 	  }
   } 
 
@@ -497,34 +420,6 @@
 		mask_item1.style.display = "block" ;
 		document.documentElement.scrollTop=0;
   }
-  // 初始數據
-  // let labels = [] , dataPoints1 = [] , dataPoints2 = [] ;
-  async function getData1(stockId) {
-	  	let fetchUrl_str="" ;
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1"   ;
-		if (stockId == 9999 ) 
-			fetchUrl_str="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"
-		else
-			fetchUrl_str=fetchUrl_str1 + stockId_list[stockId] + fetchUrl_str2 ;
-		const response = await fetch(fetchUrl_str); 
-	    if  (!response.ok) {
-		   throw new Error(`HTTP error!!!! status: ${response.status}`);
-		  }
-	    else {
-		  const result = await response.json();
-		  return result; // ← 正確把值傳出去 
-	    }
-	 }
-  async function getData2() {
-		  const response = await fetch("https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:TSE01:INDEX&resolution=D&quote=1&from=NaN&to=NaN"); 
-		  if  (!response.ok) {
-			  throw new Error(`HTTP error!!!! status: ${response.status}`);
-			}
-		  else {
-			  const result = await response.json();
-			  return result; // ← 正確把值傳出去 
-		  }
-	 }
 
   async function displayPostChart() {
 		document.documentElement.scrollTop=0;
@@ -583,21 +478,10 @@
     }
 	  
   async function startShow(sel_No) {
-	mainList.textContent = "";
-    stockId_list=STOCKS[sel_No];
-	await displayPost(9999);
-	for (let i=0;i<stockId_list.length;i++) {
-		await displayPost(stockId_list[i],i);
-	}
-	/*
-    const result = numbers.map((value, index) => {
-    return `${value}`};
-    });
-	const numbers = list9;
-    const result = numbers.map((value, index) => {
-    return `${value}`;
-    });
-    console.log(result);
-		await displayPost(result,sel_No);
-	*/	
+		mainList.textContent = "";
+		stockId_list=STOCKS[sel_No];
+		await displayPost(9999);
+		for (let i=0;i<stockId_list.length;i++) {
+			await displayPost(stockId_list[i],i);
+		}
 	}   
