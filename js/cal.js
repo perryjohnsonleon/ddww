@@ -6,21 +6,19 @@
   let unitMode = 'lot' , tick , isETF ; // 'lot' | 'share' 
   const dirLongBtn = $('dirLong');
   const dirShortBtn = $('dirShort');
+  const CODEX= (str) => {
+	  return decodeURIComponent(
+		atob(str).split('').map(
+		  ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')
+		).join('')
+	  );
+ }
   const anchorLabel = $('anchorField').querySelector('label');
   let tradeDirection = 'long'; // 'long' | 'short'
  window.addEventListener('load',function(){
 	const url=window.location.search;
-	// stockId = url.substring(url.indexOf('=') + 1);
 	const stockId = url.substring(9); 
-	if (stockId.slice(0,2) === '00') {isETF = true} else {isETF = false} ; 
-	if (isETF == false) {
-		document.querySelectorAll('.taxPreset').forEach((b,index) => b.classList.remove('active')) ;
-		document.querySelectorAll('.taxPreset').forEach((b,index) => { if (index == 0) b.classList.add('active')})
-	}	
-	else {
-		document.querySelectorAll('.taxPreset').forEach((b,index) => b.classList.remove('active')) ;		
-		document.querySelectorAll('.taxPreset').forEach((b,index) => { if (index == 2) b.classList.add('active')}) 
-	}
+	if (stockId.slice(0,2) === '00') {isETF = true} else {isETF = false} ;  
 	startShow(stockId);
   }); 
 
@@ -175,8 +173,9 @@
   
     async function getData(stockId) {	  
 	  try {
-	  	let fetchUrl_str="" ;
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
+		let fetchUrl_str="" ;
+		let fetchUrl_str1=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOg==');
+		let fetchUrl_str2=CODEX('OlNUT0NLJnF1b3RlPTE=');		  
 		fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
