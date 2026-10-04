@@ -10,8 +10,7 @@
   let tradeDirection = 'long'; // 'long' | 'short'
  window.addEventListener('load',function(){
 	const url=window.location.search;
-	// stockId = url.substring(url.indexOf('=') + 1);
-	const stockId = url.substring(9); 
+	const stockId = atob(url.substring(21)); 
 	if (stockId.slice(0,2) === '00') {isETF = true} else {isETF = false} ; 
 	if (isETF == false) {
 		document.querySelectorAll('.taxPreset').forEach((b,index) => b.classList.remove('active')) ;

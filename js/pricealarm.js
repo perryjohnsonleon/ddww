@@ -92,8 +92,7 @@
   window.addEventListener('load',function(){
 	    chimeBtn.classList.add('chime-on');
 		const url=window.location.search;
-		// stockId = url.substring(url.indexOf('=') + 1);
-		stockId = url.substring(9);
+		stockId = atob(url.substring(15));
 		startShow(stockId);
 	  }); 
 	  

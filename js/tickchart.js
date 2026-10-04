@@ -26,8 +26,7 @@
  let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
  window.addEventListener('load',function(){
 	const url=window.location.search;
-	// stockId = url.substring(url.indexOf('=') + 1);
-	stockId = url.substring(9);
+	stockId = atob(url.substring(11));
 	startShow(stockId);
 	document.getElementById("s01").addEventListener("change", function(event) {
 	   while(intervalIds.length) {
