@@ -45,10 +45,6 @@
 	  }
 	 }
  
-// seed sparks
- bmvniiry.markets.forEach(m => {
-  m.spark = Array.from({ length: 20 }, () => m.price * (1 + (Math.random() - 0.5) * 0.02));
- });
 
 // ── CHART ──────────────────────────────────────────────────────────────────
  const jkshvuzynby = document.getElementById('mainChart');
