@@ -1,4 +1,4 @@
-  const $ = id => document.getElementById(id);
+  const $ = dsjkh0fskhf => document.getElementById(dsjkh0fskhf);
   const qtyField = $('qtyField');
   const qtyInput = $('qty');
   const unitLotBtn = $('unitLot');
@@ -8,10 +8,17 @@
   const dirShortBtn = $('dirShort');
   const anchorLabel = $('anchorField').querySelector('label');
   let tradeDirection = 'long'; // 'long' | 'short'
+  const CODEX= (str) => {
+		  return decodeURIComponent(
+			atob(str).split('').map(
+			  ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')
+			).join('')
+		  );
+   }
  window.addEventListener('load',function(){
 	const url=window.location.search;
-	const stockId = atob(url.substring(21)); 
-	if (stockId.slice(0,2) === '00') {isETF = true} else {isETF = false} ; 
+	const jhdskjiyrenvnpo = atob(url.substring(21)); 
+	if (jhdskjiyrenvnpo.slice(0,2) === '00') {isETF = true} else {isETF = false} ; 
 	if (isETF == false) {
 		document.querySelectorAll('.taxPreset').forEach((b,index) => b.classList.remove('active')) ;
 		document.querySelectorAll('.taxPreset').forEach((b,index) => { if (index == 0) b.classList.add('active')})
@@ -21,10 +28,10 @@
 		document.querySelectorAll('.taxPreset').forEach((b,index) => b.classList.remove('active')) ;		
 		document.querySelectorAll('.taxPreset').forEach((b,index) => { if (index == 2) b.classList.add('active')}) 
 	}
-	startShow(stockId);
+	startShow(jhdskjiyrenvnpo);
   }); 
 
- function getTick(price) {
+ function jdhfxewvqe(price) {
     if (price < 5) {
         return 0.01;
     } else if (price < 15) {
@@ -41,7 +48,7 @@
 }
 
 
-  function updateDirectionUI(){
+  function ncxNvfdioynCUferru(){
     if (tradeDirection === 'long') {
       anchorLabel.innerHTML = '買進價（進場） <span class="hint">BUY</span>';
       $('tableSubhint').textContent = '做多：以買進價（進場）為基準，依「價格間距」上下展開各賣出價（出場）的損益試算。';
@@ -55,15 +62,15 @@
     tradeDirection = 'long';
     dirLongBtn.classList.add('active');
     dirShortBtn.classList.remove('active');
-    updateDirectionUI();
-    calculate();
+    ncxNvfdioynCUferru();
+    qoncxvheoryt();
   });
   dirShortBtn.addEventListener('click', () => {
     tradeDirection = 'short';
     dirShortBtn.classList.add('active');
     dirLongBtn.classList.remove('active');
-    updateDirectionUI();
-    calculate();
+    ncxNvfdioynCUferru();
+    qoncxvheoryt();
   });
 
   unitLotBtn.addEventListener('click', () => {
@@ -72,7 +79,7 @@
     unitShareBtn.classList.remove('active');
     qtyField.querySelector('label').innerHTML = '張數 <span class="hint">LOTS</span>';
     qtyInput.value = 1;
-    calculate();
+    qoncxvheoryt();
   });
   unitShareBtn.addEventListener('click', () => {
     unitMode = 'share';
@@ -80,7 +87,7 @@
     unitLotBtn.classList.remove('active');
     qtyField.querySelector('label').innerHTML = '股數 <span class="hint">SHARES</span>';
     qtyInput.value = 1000;
-    calculate();
+    qoncxvheoryt();
   });
 
   document.querySelectorAll('.taxPreset').forEach(btn => {
@@ -88,7 +95,7 @@
       document.querySelectorAll('.taxPreset').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       $('taxRate').value = btn.dataset.rate;
-      calculate();
+      qoncxvheoryt();
     });
   });
 
@@ -111,7 +118,7 @@
   let rowsAbove = Math.floor(ROWS_INITIAL / 2);
   let rowsBelow = Math.floor(ROWS_INITIAL / 2);
 
-  function computeRow(buyPrice, sellPrice, shares, feeRate, feeDiscount, feeMin, taxRate){
+  function lxkjhpqytynvvn(buyPrice, sellPrice, shares, feeRate, feeDiscount, feeMin, taxRate){
     const buyAmt = buyPrice * shares;
     const sellAmt = sellPrice * shares;
     const buyFee = buyAmt > 0 ? Math.max(buyAmt * feeRate * feeDiscount, feeMin) : 0;
@@ -125,7 +132,7 @@
     return {buyPrice, sellPrice, taxAmt, totalFee, netProfit, roi};
   }
 
-  function calculate(){
+  function qoncxvheoryt(){
     const qty = parseFloat(qtyInput.value) || 0;
     const shares = unitMode === 'lot' ? qty * 1000 : qty;
     const anchorPrice = parseFloat($('buyPrice').value) || 0;
@@ -147,7 +154,7 @@
       const buyPrice = tradeDirection === 'long' ? anchorPrice : varyingPrice;
       const sellPrice = tradeDirection === 'long' ? varyingPrice : anchorPrice;
 
-      const row = computeRow(buyPrice, sellPrice, shares, feeRate, feeDiscount, feeMin, taxRate);
+      const row = lxkjhpqytynvvn(buyPrice, sellPrice, shares, feeRate, feeDiscount, feeMin, taxRate);
 
       const tr = document.createElement('tr');
       const isBreakevenRow = Math.abs(varyingPrice - anchorPrice) < 1e-9;
@@ -167,17 +174,18 @@
     }
   }
   
-	async function startShow(stockId) {
-	 await initialRender(stockId);
-	 await updateDirectionUI();
-	 await calculate();
+	async function startShow(jhdskjiyrenvnpo) {
+	 await kjahvSirouiewue(jhdskjiyrenvnpo);
+	 await ncxNvfdioynCUferru();
+	 await qoncxvheoryt();
   }
   
-    async function getData(stockId) {	  
+    async function nxcvhLdsryae(jhdskjiyrenvnpo) {	  
 	  try {
 	  	let fetchUrl_str="" ;
-		let fetchUrl_str1="https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=TWS:" , fetchUrl_str2=":STOCK&quote=1" ;
-		fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
+		let fetchUrl_str1=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOg==');
+		let fetchUrl_str2=CODEX('OlNUT0NLJnF1b3RlPTE=');
+		fetchUrl_str=fetchUrl_str1 + jhdskjiyrenvnpo + fetchUrl_str2
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
 		   throw new Error(`HTTP error!!!! status: ${response.status}`);
@@ -192,18 +200,18 @@
 	  }
 	 }
 
- async function initialRender(stockId) {
+ async function kjahvSirouiewue(jhdskjiyrenvnpo) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,flatPrice,midPrice,tick;
-	  const post = await getData(stockId);
-	  if (post) {		  
-			const wi_o=post.data.o;
-			const wi_h=post.data.h;
-			const wi_c=post.data.c;
-			const wi_t=post.data.t;
+	  const bcnmshsqdygut = await nxcvhLdsryae(jhdskjiyrenvnpo);
+	  if (bcnmshsqdygut) {		  
+			const wi_o=bcnmshsqdygut.data.o;
+			const wi_h=bcnmshsqdygut.data.h;
+			const wi_c=bcnmshsqdygut.data.c;
+			const wi_t=bcnmshsqdygut.data.t;
 			const wi_oo=[...wi_o].reverse();
 			const wi_cc=[...wi_c].reverse();
 			const wi_tt=[...wi_t].reverse();
-			const quote_obj = post.data.quote ;
+			const quote_obj = bcnmshsqdygut.data.quote ;
 			for ( var n in quote_obj) {
 			   if ( n == "200009" ) itemName=quote_obj[n] ;
 			   if ( n == "11" ) incdecPrice=quote_obj[n] ;
@@ -241,17 +249,17 @@
 
   $('moreTop').addEventListener('click', () => {
     rowsAbove += ROWS_INCREMENT;
-    calculate();
+    qoncxvheoryt();
   });
   $('moreBottom').addEventListener('click', () => {
     rowsBelow += ROWS_INCREMENT;
-    calculate();
+    qoncxvheoryt();
   });
 
   document.querySelectorAll('input[type=number]').forEach(inp => {
-    inp.addEventListener('input', calculate);
+    inp.addEventListener('input', qoncxvheoryt);
   });
 
   // $('ticketTime').textContent = 'NO. ' + Date.now().toString().slice(-8);
-  updateDirectionUI();
-  calculate();
+  ncxNvfdioynCUferru();
+  qoncxvheoryt();

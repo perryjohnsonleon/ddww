@@ -1,61 +1,35 @@
-// ── DATA ───────────────────────────────────────────────────────────────────
- const stockId_list=['8888','2353','2356','2357','2324','2330','2454','2308','2317','2303','2344','2408','6770','2337','3532','1102','00403A','00980A','00981A','00982A','00991A','00992A','0050'];	
-// ── STATE ──────────────────────────────────────────────────────────────────
- const MAIN = { sym: '大盤指數', name: '2353', price: 27 };
- const MARKETS = [{ sym: '大盤指數',  name: 'NASDAQ 100', sub: 'US Index', price: 32722 }];
- const state = {
-  main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 , flat:0},
-  markets: MARKETS.map(m => ({ ...m, change: 0, spark: [] })),
-  history: [],
- };
- const mask_item1 = document.getElementById("hiddenMsg1") ;
- const mask_item2 = document.getElementById("hiddenMsg2") ;
- const mask_button = document.getElementById("collapseBtn2") ;
- const CODEX= (str) => {
-	  return decodeURIComponent(
-		atob(str).split('').map(
-		  ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')
-		).join('')
-	  );
- }
- let running=false,sw_no=1,firstVisit = true ;     // original value:  true 
- let refSec = 3000 ; // original value:  0
- let stockId,STOCKID , count=0 , btn2_expandId= ""  ;
- let width = 0 , intervalIds = [] , itemPrice_matrix=[] , itemPrice_arry = [] , itemYear_arry11 = [] , itemYear_arry12 = [] , itemYear_arry13 = [] , itemYear_arry21 = [] , itemYear_arry22 = [] , itemYear_arry23 = [] ;
- let show_YearRpt="" , show_SeasonRpt="" , show_MonthRpt="" , tr_line="" ; 
- let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
- window.addEventListener('load',function(){
+  window.addEventListener('load',function(){
 	const url=window.location.search;
-	stockId = atob(url.substring(11));
-	startShow(stockId);
+	bccm8nv1y2iyeiwey = atob(url.substring(11));
+	lkjlluGrueiuun(bccm8nv1y2iyeiwey);
 	document.getElementById("s01").addEventListener("change", function(event) {
-	   while(intervalIds.length) {
-		  clearInterval(intervalIds.pop());
+	   while(dhfkbhkzuRkg.length) {
+		  clearInterval(dhfkbhkzuRkg.pop());
 		}
-		stockId=event.target.value;	
-		if (stockId == 9999)	{
+		bccm8nv1y2iyeiwey=event.target.value;	
+		if (bccm8nv1y2iyeiwey == 7592584307)	{
 			return }  
 		else  {
-			startShow(stockId)
+			lkjlluGrueiuun(bccm8nv1y2iyeiwey)
 		}	
 	});
   }); 
    
-  async function getData(stockId) {
+  async function hfkjyfgieytbv(bccm8nv1y2iyeiwey) {
 	  let fetchUrl_str="" ;
-	  if (firstVisit) {
-		  firstVisit=false;
-		  STOCKID=stockId
+	  if (kxch5ekkskd1dkkwe) {
+		  kxch5ekkskd1dkkwe=false;
+		  FJSLQDFOKJOUM=bccm8nv1y2iyeiwey
 	  }	  
 	  try {
 		let fetchUrl_str1=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOg==');
 		let fetchUrl_str2=CODEX('OlNUT0NLJnF1b3RlPTE=');
-		if (stockId == 9999) {
+		if (bccm8nv1y2iyeiwey == 7592584307) {
 			fetchUrl_str=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3N5bWJvbD1UV1M6VFNFMDE6SU5ERVgmcmVzb2x1dGlvbj1EJnF1b3RlPTEmZnJvbT1OYU4mdG89TmFO') 
-		} else if (stockId == 0) {			
+		} else if (bccm8nv1y2iyeiwey == 0) {			
 			fetchUrl_str=CODEX('aHR0cHM6Ly93cy5hcGkuY255ZXMuY29tL3dzL2FwaS92MS9jaGFydGluZy9oaXN0b3J5P3Jlc29sdXRpb249MSZzeW1ib2w9VFdTOlRTRTAxOklOREVYJnF1b3RlPTE=')
 		} else {
-			fetchUrl_str=fetchUrl_str1 + stockId + fetchUrl_str2
+			fetchUrl_str=fetchUrl_str1 + bccm8nv1y2iyeiwey + fetchUrl_str2
 		}
 		const response = await fetch(fetchUrl_str); 
 	    if  (!response.ok) {
@@ -77,24 +51,24 @@
  });
 
 // ── CHART ──────────────────────────────────────────────────────────────────
- const canvas = document.getElementById('mainChart');
- const ctx = canvas.getContext('2d');
+ const jkshvuzynby = document.getElementById('mainChart');
+ const ctx = jkshvuzynby.getContext('2d');
  let animFrame;
 
- function resizeCanvas(stockId) {
+ function hsjkyeWryyehq(bccm8nv1y2iyeiwey) {
   const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = 200 * dpr;
-  canvas.style.height = '200px';
+  const rect = jkshvuzynby.parentElement.getBoundingClientRect();
+  jkshvuzynby.width = rect.width * dpr;
+  jkshvuzynby.height = 200 * dpr;
+  jkshvuzynby.style.height = '200px';
   ctx.scale(dpr, dpr);
-  drawChart();
+  nxcmnzvqrurew();
  }
 
- function drawChart() {
-  const w = canvas.clientWidth, h = canvas.clientHeight;
+ function nxcmnzvqrurew() {
+  const w = jkshvuzynby.clientWidth, h = jkshvuzynby.clientHeight;
   ctx.clearRect(0, 0, w, h);
-  const data = state.history;
+  const data = bmvniiry.bvhyqwip;
   if (data.length < 2) return;
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -107,7 +81,7 @@
     y: pad.top + (max - data[i]) * yScale
   });
   // const isGain = data[data.length - 1] >= data[0];
-  const isGain = state.main.change >=0 ? true : false ;
+  const isGain = bmvniiry.nxcjcqw.vzsluere >=0 ? true : false ;
   const lineColor = isGain ? '#ff1744' : '#00e676';
   const fillColor = isGain ? 'rgba(255,23,68,' : 'rgba(0,230,118,';
   // Area fill
@@ -154,8 +128,8 @@
   ctx.fillStyle = fillColor + '0.3)';
   ctx.fill();
   // Open price midline
-  const openPrice = state.main.open;
-  const flatPrice = state.main.flat;
+  const openPrice = bmvniiry.nxcjcqw.jxcxuv;
+  const flatPrice = bmvniiry.nxcjcqw.mnvqriuhf;
   const clampedOpen = Math.min(Math.max(flatPrice, min), max);
   const openY = pad.top + (max - clampedOpen) * yScale;
   ctx.beginPath();
@@ -182,32 +156,41 @@
   });
 }
 
-// ── SPARKS ─────────────────────────────────────────────────────────────────
-/*
-function drawSpark(svgEl, data, isGain) {
-  const W = 60, H = 24;
-  const min = Math.min(...data), max = Math.max(...data), rng = max - min || 1;
-  const xStep = W / (data.length - 1);
-  const pts = data.map((v, i) => `${i * xStep},${H - ((v - min) / rng) * (H - 2) - 1}`).join(' ');
-  const color = isGain ? '#ff1744' : '#00e676';
-  svgEl.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
-}
-*/
-// ── RENDER ─────────────────────────────────────────────────────────────────
- async function renderMain(stockId) {
+ const JDSHFHIU = { sym: '大盤指數', name: '2353', price: 27 };
+ const WEUZKFUC = [{ sym: '大盤指數',  name: 'VCJLKU 111', sub: 'JDJFD MNMVN', price: 32722 }];
+ const bmvniiry = {
+  nxcjcqw: { ...JDSHFHIU, jxcxuv: JDSHFHIU.price, nmcnio: JDSHFHIU.price, pozbwue: JDSHFHIU.price, vzsluere: 0 , mnvqriuhf:0},
+  markets: WEUZKFUC.map(m => ({ ...m, change: 0, spark: [] })),
+  bvhyqwip: [],
+ };
+ const mask_item1 = document.getElementById("hiddenMsg1") ;
+ const mask_item2 = document.getElementById("hiddenMsg2") ;
+ const mask_button = document.getElementById("collapseBtn2") ;
+ const CODEX= (str) => {
+	  return decodeURIComponent(
+		atob(str).split('').map(
+		  ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')
+		).join('')
+	  );
+ }
+ let bcv4hjyt1tytngn=false,sw_no=1,kxch5ekkskd1dkkwe = true ;     // original value:  true 
+ let hvzjskadSnd = 3000 ; 
+ let bccm8nv1y2iyeiwey,FJSLQDFOKJOUM , count=0 , btn2_expandId= "";
+ let width = 0 , dhfkbhkzuRkg = [] ;
+ let mymatrix,wi_o,wi_h,wi_c,wi_cc,wi_t,wi_tt,midline_txt,title_txt,item_price,mid_price=0,min_price=0,max_price=0,incdecPrice,point_no=0;
+
+ async function pokjsk9kb1vkwyuse(bccm8nv1y2iyeiwey) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,midPrice;
-	  const post = await getData(stockId);
-	  if (post) {		  
-			const wi_o=post.data.o;
-			const wi_h=post.data.h;
-			const wi_c=post.data.c;
-			const wi_t=post.data.t;
+	  const jhksdwhweiyrwr = await hfkjyfgieytbv(bccm8nv1y2iyeiwey);
+	  if (jhksdwhweiyrwr) {		  
+			const wi_o=jhksdwhweiyrwr.data.o;
+			const wi_h=jhksdwhweiyrwr.data.h;
+			const wi_c=jhksdwhweiyrwr.data.c;
+			const wi_t=jhksdwhweiyrwr.data.t;
 			const wi_oo=[...wi_o].reverse();
 			const wi_cc=[...wi_c].reverse();
 			const wi_tt=[...wi_t].reverse();
-			const quote_obj = post.data.quote ;
+			const quote_obj = jhksdwhweiyrwr.data.quote ;
 			const m = state.main;
 			const isGain = m.change >= 0;
 			const priceEl = document.getElementById('mainPrice');
@@ -255,21 +238,21 @@ function drawSpark(svgEl, data, isGain) {
   document.getElementById('changeVal').textContent = (isGain ? '+' : '') + m.change;
   document.getElementById('changePct').textContent =
     '(' + (isGain ? '+' : '') + ((m.change / m.open) * 100).toFixed(2) + '%)';
-  drawChart();
+  nxcmnzvqrurew();
 }
 
- async function graphcardRender(stockId) {
+ async function hdkSsuouePquencc(bccm8nv1y2iyeiwey) {
 	  let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice,flatPrice,midPrice;
-	  const post = await getData(stockId);
-	  if (post) {		  
-			const wi_o=post.data.o;
-			const wi_h=post.data.h;
-			const wi_c=post.data.c;
-			const wi_t=post.data.t;
+	  const jhksdwhweiyrwr = await hfkjyfgieytbv(bccm8nv1y2iyeiwey);
+	  if (jhksdwhweiyrwr) {		  
+			const wi_o=jhksdwhweiyrwr.data.o;
+			const wi_h=jhksdwhweiyrwr.data.h;
+			const wi_c=jhksdwhweiyrwr.data.c;
+			const wi_t=jhksdwhweiyrwr.data.t;
 			const wi_oo=[...wi_o].reverse();
 			const wi_cc=[...wi_c].reverse();
 			const wi_tt=[...wi_t].reverse();
-			const quote_obj = post.data.quote ;
+			const quote_obj = jhksdwhweiyrwr.data.quote ;
 			const m = state.main;
 			const isGain = m.change >= 0;
 			const symName = document.getElementById('sym');
@@ -288,7 +271,7 @@ function drawSpark(svgEl, data, isGain) {
 		   m.sys=itemName;
 		   m.price=itemPrice ;
 		   m.open=wi_oo[0] ;
-		   state.history=[...wi_c].reverse();
+		   bmvniiry.bvhyqwip=[...wi_c].reverse();
 		   m.high=highPrice ;
 		   m.low=lowPrice ;
 		   m.change=incdecPrice ;
@@ -309,19 +292,19 @@ function drawSpark(svgEl, data, isGain) {
 		}
   }
 
- async function renderMarkets(stockId) {
+ async function ncn0bchpq6yety(bccm8nv1y2iyeiwey) {
   let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
   const m = state.markets;
-  const post = await getData(9999);
-  if (post) {
-		const wi_o=post.data.o;
-		const wi_h=post.data.h;
-		const wi_c=post.data.c;
-		const wi_t=post.data.t;
+  const jhksdwhweiyrwr = await hfkjyfgieytbv(7592584307);
+  if (jhksdwhweiyrwr) {
+		const wi_o=jhksdwhweiyrwr.data.o;
+		const wi_h=jhksdwhweiyrwr.data.h;
+		const wi_c=jhksdwhweiyrwr.data.c;
+		const wi_t=jhksdwhweiyrwr.data.t;
 		const wi_oo=[...wi_o].reverse();
 		const wi_cc=[...wi_c].reverse();
 		const wi_tt=[...wi_t].reverse();
-		const quote_obj = post.data.quote ;
+		const quote_obj = jhksdwhweiyrwr.data.quote ;
 		const isGain = m.change >= 0;
 		const priceEl = document.getElementById('mainPrice');
 		for ( var n in quote_obj) {
@@ -372,17 +355,17 @@ function drawSpark(svgEl, data, isGain) {
  }
 
 // ── UPDATE ─────────────────────────────────────────────────────────────────
-function tick(stockId) {
+function tick(bccm8nv1y2iyeiwey) {
   // Main stock update
   const volatility = 0.0012;
   const drift = (Math.random() - 0.499) * volatility;
   state.main.price = parseFloat((state.main.price * (1 + drift)).toFixed(2));
-  state.main.change = parseFloat((state.main.price - state.main.open).toFixed(2));
-  if (state.main.price > state.main.high) state.main.high = state.main.price;
-  if (state.main.price < state.main.low) state.main.low = state.main.price;
-  state.history.push(state.main.price);
-  if (state.history.length > 120) state.history.shift();
-  renderMain(stockId);
+  bmvniiry.nxcjcqw.vzsluere = parseFloat((state.main.price - bmvniiry.nxcjcqw.jxcxuv).toFixed(2));
+  if (state.main.price > bmvniiry.nxcjcqw.nmcnio) bmvniiry.nxcjcqw.nmcnio = state.main.price;
+  if (state.main.price < bmvniiry.nxcjcqw.pozbwue) bmvniiry.nxcjcqw.pozbwue = state.main.price;
+  bmvniiry.bvhyqwip.push(state.main.price);
+  if (bmvniiry.bvhyqwip.length > 120) bmvniiry.bvhyqwip.shift();
+  pokjsk9kb1vkwyuse(bccm8nv1y2iyeiwey);
 
   // Market rows update
   state.markets.forEach((m, idx) => {
@@ -428,21 +411,21 @@ document.querySelectorAll('.range-btn').forEach(btn => {
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 // Seed open slightly below current price
-state.main.open = parseFloat((MAIN.price * (1 - Math.random() * 0.01)).toFixed(2));
-state.main.high = parseFloat((MAIN.price * (1 + Math.random() * 0.008)).toFixed(2));
-state.main.low = parseFloat((MAIN.price * (1 - Math.random() * 0.008)).toFixed(2));
-state.main.change = parseFloat((state.main.price - state.main.open).toFixed(2));
+bmvniiry.nxcjcqw.jxcxuv = parseFloat((JDSHFHIU.price * (1 - Math.random() * 0.01)).toFixed(2));
+bmvniiry.nxcjcqw.nmcnio = parseFloat((JDSHFHIU.price * (1 + Math.random() * 0.008)).toFixed(2));
+bmvniiry.nxcjcqw.pozbwue = parseFloat((JDSHFHIU.price * (1 - Math.random() * 0.008)).toFixed(2));
+bmvniiry.nxcjcqw.vzsluere = parseFloat((state.main.price - bmvniiry.nxcjcqw.jxcxuv).toFixed(2));
 
 // Seed market changes
 state.markets.forEach(m => {
   m.change = parseFloat(((Math.random() - 0.48) * m.price * 0.015).toFixed(2));
 });
 
- async function startShow(stockId) {
-	await graphcardRender(stockId);
-	await resizeCanvas(stockId);
-	await renderMain(stockId);
-	await renderMarkets(stockId);
+ async function lkjlluGrueiuun(bccm8nv1y2iyeiwey) {
+	await hdkSsuouePquencc(bccm8nv1y2iyeiwey);
+	await hsjkyeWryyehq(bccm8nv1y2iyeiwey);
+	await pokjsk9kb1vkwyuse(bccm8nv1y2iyeiwey);
+	await ncn0bchpq6yety(bccm8nv1y2iyeiwey);
     id=setInterval(async() => {
 		const marketClosetime = "13:30:00" , marketOpentime = "09:00:00" ; 
 		const [h2, m2, s2] = marketClosetime.split(':').map(Number);
@@ -452,28 +435,28 @@ state.markets.forEach(m => {
 		const now = new Date();
 		const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();	
 		if ((nowSeconds > timeToSeconds1) && (nowSeconds < timeToSeconds2)) {
-			if  (running) return;
-			await graphcardRender(STOCKID);
-			await resizeCanvas(STOCKID);
-			await renderMain(STOCKID);
-			await renderMarkets(STOCKID);
-			// await tick(STOCKID);			
+			if  (bcv4hjyt1tytngn) return;
+			await hdkSsuouePquencc(FJSLQDFOKJOUM);
+			await hsjkyeWryyehq(FJSLQDFOKJOUM);
+			await pokjsk9kb1vkwyuse(FJSLQDFOKJOUM);
+			await ncn0bchpq6yety(FJSLQDFOKJOUM);
+			// await tick(FJSLQDFOKJOUM);			
 		}
 		else  { 		 
 			return;
 		 }	
 
 	  /*
-		 const post1= await getData(stockId);
-		 renderMain(stockId);
-		 const post2= await getData(0);
-		 renderMain(0);	
+		 const jhksdwhweiyrwr1= await hfkjyfgieytbv(bccm8nv1y2iyeiwey);
+		 pokjsk9kb1vkwyuse(bccm8nv1y2iyeiwey);
+		 const jhksdwhweiyrwr2= await hfkjyfgieytbv(0);
+		 pokjsk9kb1vkwyuse(0);	
 	 */
-		 running=false ;
+		 bcv4hjyt1tytngn=false ;
 	},
    3000);
-   intervalIds.push(id); 
+   dhfkbhkzuRkg.push(id); 
  }   
 
- window.addEventListener('resize', resizeCanvas(stockId));
+ window.addEventListener('resize', hsjkyeWryyehq(bccm8nv1y2iyeiwey));
  // setInterval(tick, 3000);

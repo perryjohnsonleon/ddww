@@ -1,3 +1,29 @@
+	async function showRealprice(stockNo) {
+		// stockNo 是用 btoa 加密
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/tickchart.htm?hfkhdyfnf=' + stockNo ;
+		/*
+		const url=window.location.search;
+	    const stockId = url.substring(11);
+        */		
+    }
+	
+	async function alarmPrice(stockNo) {
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/pricealarm.htm?jfvdo7dfuotdv=' + stockNo ;
+		/*
+		const url=window.location.search;
+	    const stockId = url.substring(15);
+        */	
+    }	
+	
+	async function countProfit(stockNo) {
+		window.location.href = 'https://perryjohnsonleon.github.io/ddww/cal.htm?wsjkhzu01j9vjqujpyd=' + stockNo ;
+		/*
+		const url=window.location.search;
+	    const stockId = url.substring(21);
+        */	
+    }
+
+
 /*const str = "'2330','2454','2308','3008','2317','2303'";
 const arr = str.split(',').map(x => x.slice(1, -1)); */
 
@@ -16,6 +42,13 @@ function decode(str) {
     ).join('')
   );
 }
+
+
+const encoded = btoa("Hello World");
+console.log(encoded); // SGVsbG8gV29ybGQ=
+
+const decoded = atob(encoded);
+console.log(decoded); // Hello World
 
 // console.log(encode("'2330','2454','2308','3008','2317','2303','2356','2357','2353','1102','2324','2344','8299','2408','6770','2337','2347','2371','1504','2891','00403A','00991A','00982A','00980A','00981A','0050','0056'"));   //
 // decode("
