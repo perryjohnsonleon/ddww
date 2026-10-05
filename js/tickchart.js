@@ -46,7 +46,7 @@
 	 }
  
 // seed sparks
- state.markets.forEach(m => {
+ bmvniiry.markets.forEach(m => {
   m.spark = Array.from({ length: 20 }, () => m.price * (1 + (Math.random() - 0.5) * 0.02));
  });
 
@@ -155,7 +155,13 @@
     ctx.fillText('$' + val.toFixed(2), w - 2, y + 4);
   });
 }
-
+/*
+ const state = {
+  main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 , flat:0},
+  markets: MARKETS.map(m => ({ ...m, change: 0, spark: [] })),
+  history: [],
+ };
+*/
  const JDSHFHIU = { sym: '大盤指數', name: '2353', price: 27 };
  const WEUZKFUC = [{ sym: '大盤指數',  name: 'VCJLKU 111', sub: 'JDJFD MNMVN', price: 32722 }];
  const bmvniiry = {
