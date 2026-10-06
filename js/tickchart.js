@@ -45,7 +45,6 @@
 	  }
 	 }
  
-
 // ── CHART ──────────────────────────────────────────────────────────────────
  const jkshvuzynby = document.getElementById('mainChart');
  const ctx = jkshvuzynby.getContext('2d');
@@ -193,7 +192,7 @@
 			const wi_cc=[...wi_c].reverse();
 			const wi_tt=[...wi_t].reverse();
 			const quote_obj = jhksdwhweiyrwr.data.quote ;
-			const m = state.main;
+			const m = bmvniiry.nxcjcqw;
 			const isGain = m.change >= 0;
 			const priceEl = document.getElementById('mainPrice');
 			for ( var n in quote_obj) {
@@ -226,7 +225,7 @@
 		   document.getElementById('statHigh').textContent = '$' + m.high;
 		   document.getElementById('statLow').textContent = '$' + m.low;
 		}
-  const m = state.main;
+  const m = bmvniiry.nxcjcqw;
   const isGain = m.change >= 0;
 
   const priceEl = document.getElementById('mainPrice');
@@ -255,7 +254,7 @@
 			const wi_cc=[...wi_c].reverse();
 			const wi_tt=[...wi_t].reverse();
 			const quote_obj = jhksdwhweiyrwr.data.quote ;
-			const m = state.main;
+			const m = bmvniiry.nxcjcqw;
 			const isGain = m.change >= 0;
 			const symName = document.getElementById('sym');
 			const priceEl = document.getElementById('mainPrice');
@@ -294,9 +293,28 @@
 		}
   }
 
+/*
+ const MAIN = { sym: '大盤指數', name: '2353', price: 27 };
+ const MARKETS = [{ sym: '大盤指數',  name: 'NASDAQ 100', sub: 'US Index', price: 32722 }];
+ const state = {
+  main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 , flat:0},
+  markets: MARKETS.map(m => ({ ...m, change: 0, spark: [] })),
+  history: [],
+ };
+*/
+/*
+ const JDSHFHIU = { sym: '大盤指數', name: '2353', price: 27 };
+ const WEUZKFUC = [{ sym: '大盤指數',  name: 'VCJLKU 111', sub: 'JDJFD MNMVN', price: 32722 }];
+ const bmvniiry = {
+  nxcjcqw: { ...JDSHFHIU, jxcxuv: JDSHFHIU.price, nmcnio: JDSHFHIU.price, pozbwue: JDSHFHIU.price, vzsluere: 0 , mnvqriuhf:0},
+  markets: { ...JDSHFHIU, open(jxcxuv): JDSHFHIU.price, (high)nmcnio: JDSHFHIU.price, (low)pozbwue: JDSHFHIU.price, change(vzsluere): 0 , (flat)mnvqriuhf:0},
+  bvhyqwip: [],
+ };
+*/
+
  async function ncn0bchpq6yety(bccm8nv1y2iyeiwey) {
   let itemName,incdecPrice,itemPrice,incdectxtPrice,highPrice,lowPrice;
-  const m = state.markets;
+  const m = bmvniiry.markets;
   const jhksdwhweiyrwr = await hfkjyfgieytbv(7592584307);
   if (jhksdwhweiyrwr) {
 		const wi_o=jhksdwhweiyrwr.data.o;
@@ -321,14 +339,14 @@
 	   else incdectxtPrice= incdecPrice ;
 	   m.sym="大盤指數";
 	   m.price=itemPrice ;
-	   m.open=wi_oo[0] ;
-	   m.high=highPrice ;
-	   m.low=lowPrice ;
-	   m.change=incdecPrice ;
+	   m.jxcxuv=wi_oo[0] ;
+	   m.nmcnio=highPrice ;
+	   m.pozbwue=lowPrice ;
+	   m.vzsluere=incdecPrice ;
   }	 
 	const list = document.getElementById('marketList');
 	list.innerHTML = '';
-	const isGain = m.change >= 0;
+	const isGain = m.vzsluere >= 0;
 	const row = document.createElement('div');
 	row.className = 'market-row';
 	row.id = 'mrow-0';
@@ -341,8 +359,8 @@
 	  </div>
 	  <div class="market-price-col" id="mprice-0">$${m.price}</div>
 	  <div class="market-change-col ${isGain ? 'gain-text' : 'loss-text'}" id="mchange-0">
-		${isGain ? '+' : ''}${m.change}<br>
-		<span style="font-size:0.62rem;opacity:0.7">${isGain ? '+' : ''}${((m.change / (m.price - m.change)) * 100).toFixed(2)}%</span>
+		${isGain ? '+' : ''}${m.vzsluere}<br>
+		<span style="font-size:0.62rem;opacity:0.7">${isGain ? '+' : ''}${((m.vzsluere / (m.price - m.change)) * 100).toFixed(2)}%</span>
 	  </div>
 	`;
 	const nameCol = row.querySelector('.market-name-col .name');
@@ -355,53 +373,6 @@
 	row.querySelector('.market-name-col').firstElementChild.replaceWith(sparkWrap);
 	list.appendChild(row);
  }
-
-// ── UPDATE ─────────────────────────────────────────────────────────────────
-function tick(bccm8nv1y2iyeiwey) {
-  // Main stock update
-  const volatility = 0.0012;
-  const drift = (Math.random() - 0.499) * volatility;
-  state.main.price = parseFloat((state.main.price * (1 + drift)).toFixed(2));
-  bmvniiry.nxcjcqw.vzsluere = parseFloat((state.main.price - bmvniiry.nxcjcqw.jxcxuv).toFixed(2));
-  if (state.main.price > bmvniiry.nxcjcqw.nmcnio) bmvniiry.nxcjcqw.nmcnio = state.main.price;
-  if (state.main.price < bmvniiry.nxcjcqw.pozbwue) bmvniiry.nxcjcqw.pozbwue = state.main.price;
-  bmvniiry.bvhyqwip.push(state.main.price);
-  if (bmvniiry.bvhyqwip.length > 120) bmvniiry.bvhyqwip.shift();
-  pokjsk9kb1vkwyuse(bccm8nv1y2iyeiwey);
-
-  // Market rows update
-  state.markets.forEach((m, idx) => {
-    const d = (Math.random() - 0.499) * 0.0015;
-    m.price = parseFloat((m.price * (1 + d)).toFixed(2));
-    m.change = parseFloat((m.change + m.price * d).toFixed(2));
-    m.spark.push(m.price);
-    if (m.spark.length > 20) m.spark.shift();
-
-    const isGain = m.change >= 0;
-    const priceEl = document.getElementById('mprice-0');
-    const changeEl = document.getElementById('mchange-0');
-    const rowEl = document.getElementById('mrow-' + idx);
-
-    if (priceEl) {
-      priceEl.textContent = '$' + m.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      priceEl.className = 'market-price-col';
-    }
-    if (changeEl) {
-      changeEl.className = 'market-change-col ' + (isGain ? 'gain-text' : 'loss-text');
-      changeEl.innerHTML = `${isGain ? '+' : ''}${m.change}<br>
-        <span style="font-size:0.62rem;opacity:0.7">${isGain ? '+' : ''}${Math.abs((m.change / (m.price - m.change || 1)) * 100).toFixed(2)}%</span>`;
-    }
-    if (rowEl) {
-      rowEl.classList.remove('flash-gain', 'flash-loss');
-      void rowEl.offsetWidth;
-      rowEl.classList.add(isGain ? 'flash-gain' : 'flash-loss');
-
-      // Redraw spark
-      const sparkEl = rowEl.querySelector('.mini-spark');
-      // if (sparkEl) drawSpark(sparkEl, m.spark, isGain);
-    }
-  });
-}
 
 // ── RANGE BUTTONS ──────────────────────────────────────────────────────────
 document.querySelectorAll('.range-btn').forEach(btn => {
@@ -416,10 +387,10 @@ document.querySelectorAll('.range-btn').forEach(btn => {
 bmvniiry.nxcjcqw.jxcxuv = parseFloat((JDSHFHIU.price * (1 - Math.random() * 0.01)).toFixed(2));
 bmvniiry.nxcjcqw.nmcnio = parseFloat((JDSHFHIU.price * (1 + Math.random() * 0.008)).toFixed(2));
 bmvniiry.nxcjcqw.pozbwue = parseFloat((JDSHFHIU.price * (1 - Math.random() * 0.008)).toFixed(2));
-bmvniiry.nxcjcqw.vzsluere = parseFloat((state.main.price - bmvniiry.nxcjcqw.jxcxuv).toFixed(2));
+bmvniiry.nxcjcqw.vzsluere = parseFloat((bmvniiry.nxcjcqw.price - bmvniiry.nxcjcqw.jxcxuv).toFixed(2));
 
 // Seed market changes
-state.markets.forEach(m => {
+bmvniiry.markets.forEach(m => {
   m.change = parseFloat(((Math.random() - 0.48) * m.price * 0.015).toFixed(2));
 });
 

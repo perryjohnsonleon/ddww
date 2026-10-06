@@ -208,16 +208,6 @@
 	a1ncbvoiwi06w="JzYyMTQnLCcyNDI3JywnMjQ1MycsJzI0NjgnLCcyNDcxJywnMjQ4MCcsJzMwMjknLCc0OTk0JywnNTIwMycsJzYxMTInLCc2MTgzJywnMDA1MCcsJzAwODc4JywnMDA2MjA4JywnMDA3MTMnLCcwMDY5MicsJzAwODgxJywnMDA5MTknLCcwMDk0MCcsJzAwNzU3JywnMDA5ODJBJywnMDA5ODNBJywnMDA5ODRBJywnMDA5ODVBJywnMDA5OTJBJw==";
 	const FDYUDYG = {jxzjldfo: '&*sdf29ufs%uf$jf1u3fuu', kjdsuofu: 'hxhzx078tyji', jcnuoufifu: 0 , cuoiuwuqie: 0, sidpsids: 0, piuweyfnqq: 0 };
 	const WOJCJQMNNV = [sdj2sj7ry0iweyr,nv9dj3ip1em6pm,nv00cbm5ipk7sdkdk,djs1d5uu97mdm,si2sa41ik7syw,apm8dk9ue3uu,js0dud35lj1djlj,yrec7c3ximcnv,p9okcque0bv,jxjx94x1mnpwqc,a1ncbvoiwi06w];
-	/*
-		const MAIN = { sym: '大盤指數', id: '2353', price: 0 , high: 0, low: 0, change: 0 };
-		const MARKETS = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11];
-		const state = {
-			main: { ...MAIN, open: MAIN.price, high: MAIN.price, low: MAIN.price, change: 0 , flat:0},
-			markets: MARKETS.map(m => ({ ...m, change: 0, spark: [] })),
-			history: [],
-		};
-	
-	*/
 	const JDSHFHIU = { sym: '大盤指數', id: '2353', price: 0 , high: 0, low: 0, change: 0 };
 	const bmvniiry = {
 	  nxcjcqw: { ...JDSHFHIU, jxcxuv: JDSHFHIU.price, nmcnio: JDSHFHIU.price, pozbwue: JDSHFHIU.price, vzsluere: 0 , mnvqriuhf:0},
@@ -229,6 +219,10 @@
 	nxmcyeqrw="aHR0cHM6Ly9wZXJyeWpvaG5zb25sZW9uLmdpdGh1Yi5pby9kZHd3L3ByaWNlYWxhcm0uaHRtP2pmdmRvN2RmdW90ZHY9",
 	ouvimvkiffi="aHR0cHM6Ly9wZXJyeWpvaG5zb25sZW9uLmdpdGh1Yi5pby9kZHd3L2NhbC5odG0/d3Nqa2h6dTAxajl2anF1anB5ZD0=";
 	let qwshjkkgu_pjwqvxzn=[],nxbciyrpsg=false,sw_no=1,uywebdncnc = true ;
+	let $uydyhsjde="季財報,epsYOY(%),EPS,累計EPS",$jcvuzxnqwpjd="月財報,營收(千元),年增率";
+	// 5a2j6LKh5aCxLGVwc1lPWSglKSxFUFMs57Sv6KiIRVBT
+	// 5pyI6LKh5aCxLOeHn+aUtijljYPlhYMpLOW5tOWinueOhw==
+	// qwshjkkgu_pjwqvxzn = CODEX(hc01uqujdcxnn[sel_No]).split(',').map(x => x.slice(1, -1));
     let refSec = 3000 ; 
 	let count=0 ,qwshjkkgu=0 , btn2_expandId= ""  ;
 	let width = 0 , ncvnhWqeu = [] , ckviieijndMX=[] , jckljxcoveuvr = [] , cvkljforuevr = [] , ncvjuojfmcervr = [] , oqcxbueyhfvr = [] , nchajfhweuyvr = [] , qwbphdueuvr = [] , zuincksjsdueyr = [] ;
