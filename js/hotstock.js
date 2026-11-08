@@ -111,7 +111,7 @@
 	  const fipohzqrw = await jeirqurwgjdoiure(931658204187);
 	  if (fipohzqrw) {
 			const ITEMS = fipohzqrw.data.items ;
-			const ITEM1 = ITEMS.slice(13, 17);
+			const ITEM1 = ITEMS.slice(12, 17);
 			const ITEM2 = ITEMS.slice(0, 12);	
 			ITEM1.forEach((quote_obj,idx) => {
 				for ( var n in quote_obj) {
